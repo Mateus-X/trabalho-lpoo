@@ -1,6 +1,5 @@
 package models.enums;
 
 public enum ModeloVan {
-    Kombi, 
-    Sprinter,
+    KOMBI, SPIN, DUCATO, ODYSSEY, SPRINTER;
 }

@@ -1,5 +1,5 @@
 package models.enums;
 
 public enum ModeloAutomovel {
-    Gol, Celta, Palio, Civic, Clio
+    GOL, CELTA, PALIO, CIVIC, C300;
 }
