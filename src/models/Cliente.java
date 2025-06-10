@@ -5,7 +5,7 @@ public class Cliente {
     private String sobrenome;
     private String RG;
     private String CPF;
-    private String enderoco;
+    private String endereco;
 
     public String getNome() {
         return nome;
@@ -39,11 +39,11 @@ public class Cliente {
         this.CPF = CPF;
     }
 
-    public String getEnderoco() {
-        return enderoco;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setEnderoco(String enderoco) {
-        this.enderoco = enderoco;
+    public void setEndereco(String enderoco) {
+        this.endereco = enderoco;
     }
 }
