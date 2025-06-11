@@ -3,6 +3,8 @@ import models.enums.Categoria;
 import models.enums.Estado;
 import models.enums.Marca;
 
+import java.util.Calendar;
+
 public abstract class Veiculo<T extends Enum<T>> {
     private double valorVenda;
     private double valorDiariaLocacao;
@@ -11,6 +13,7 @@ public abstract class Veiculo<T extends Enum<T>> {
     private Estado estado;
     private Categoria categoria;
     private Marca marca;
+    private Locacao locacao;
 
     public Categoria getCategoria() {
         return categoria;
@@ -76,9 +79,21 @@ public abstract class Veiculo<T extends Enum<T>> {
         this.valorDiariaLocacao = valorDiariaLocacao;
     }
 
-    public void alugar() {}
-
     public void vender() {}
 
-    public void devolverAluguel() {}
+    public void alugar(int dias, Calendar data, Cliente cliente) {
+        if (this.estado != Estado.LOCADO) {
+            this.estado = Estado.LOCADO;
+
+            double valorLocacao = dias * this.valorDiariaLocacao;
+            this.locacao = new Locacao(dias, valorLocacao, data, cliente);
+        }
+    }
+
+    public void devolverAluguel() {
+        if (this.estado == Estado.LOCADO) {
+            this.estado = Estado.DISPONIVEL; // ou outro estado apropriado
+            this.locacao = null;
+        }
+    }
 }
