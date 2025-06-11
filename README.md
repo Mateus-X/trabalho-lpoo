@@ -83,7 +83,7 @@ src/
 - Java 8+
 - Java Swing
 - Orientação a Objetos (Herança, Polimorfismo, Encapsulamento)
-- IDE: Eclipse ou NetBeans
+- IDE: Eclipse, NetBeans e IntelliJ
 
 ## 📦 Como Executar
 
