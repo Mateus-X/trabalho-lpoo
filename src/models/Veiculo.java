@@ -1,99 +1,108 @@
-package models;
+package models; // Pacote ajustado
+
+import interfaces.VeiculoI; // Import ajustado
 import models.enums.Categoria;
 import models.enums.Estado;
 import models.enums.Marca;
 
 import java.util.Calendar;
 
-public abstract class Veiculo<T extends Enum<T>> {
-    private double valorVenda;
-    private double valorDiariaLocacao;
-    private T modelo;
-    private int ano;
-    private Estado estado;
-    private Categoria categoria;
-    private Marca marca;
-    private Locacao locacao;
+public abstract class Veiculo implements VeiculoI {
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
+    protected Marca marca;
+    protected Estado estado;
+    protected Locacao locacao;
+    protected Categoria categoria;
+    protected double valorDeCompra;
+    protected String placa;
+    protected int ano;
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public Marca getMarca() {
-        return marca;
-    }
-
-    public void setMarca(Marca marca) {
+    public Veiculo(Marca marca, Categoria categoria, double valorDeCompra, String placa, int ano) {
         this.marca = marca;
-    }
-
-    public double getValorVenda() {
-        return valorVenda;
-    }
-
-    public void setValorVenda(double valorVenda) {
-        this.valorVenda = valorVenda;
-    }
-
-    public double getValorDiariaLocacao() {
-        return valorDiariaLocacao;
-    }
-
-    public void setValorDiariaLocacao(double valorDiariaLocacao) {
-        this.valorDiariaLocacao = valorDiariaLocacao;
-    }
-
-    public T getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(T modelo) {
-        this.modelo = modelo;
-    }
-
-    public int getAno() {
-        return ano;
-    }
-
-    public void setAno(int ano) {
+        this.categoria = categoria;
+        this.valorDeCompra = valorDeCompra;
+        this.placa = placa;
         this.ano = ano;
+        this.estado = Estado.DISPONIVEL; // Ou Estado.NOVO, dependendo do estado inicial quando comprado.
+        this.locacao = null;
     }
 
+    @Override
+    public void locar(int dias, Calendar data, Cliente cliente) {
+        if (this.estado == Estado.DISPONIVEL) {
+            this.estado = Estado.LOCADO;
+            double valorLocacao = dias * this.getValorDiariaLocacao();
+            this.locacao = new Locacao(dias, valorLocacao, data, cliente);
+        } else {
+            System.out.println("Não foi possível locar o veículo. Estado atual: " + this.estado);
+        }
+    }
+
+    @Override
+    public void vender() {
+        if (this.estado == Estado.DISPONIVEL) {
+            this.estado = Estado.VENDIDO;
+            this.locacao = null;
+        } else {
+            System.out.println("Não foi possível vender o veículo. Estado atual: " + this.estado);
+        }
+    }
+
+    @Override
+    public void devolver() {
+        if (this.estado == Estado.LOCADO) {
+            this.estado = Estado.DISPONIVEL;
+            this.locacao = null;
+        } else {
+            System.out.println("Não foi possível devolver o veículo. Estado atual: " + this.estado);
+        }
+    }
+
+    @Override
     public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    @Override
+    public Marca getMarca() {
+        return marca;
     }
 
-    public Veiculo(double valorVenda, T modelo, int ano, Estado estado, double valorDiariaLocacao) {
-        this.valorVenda = valorVenda;
-        this.modelo = modelo;
-        this.ano = ano;
-        this.estado = estado;
-        this.valorDiariaLocacao = valorDiariaLocacao;
+    @Override
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void vender() {}
+    @Override
+    public Locacao getLocacao() {
+        return locacao;
+    }
 
-    public void alugar(int dias, Calendar data, Cliente cliente) {
-        if (this.estado != Estado.LOCADO) {
-            this.estado = Estado.LOCADO;
+    @Override
+    public String getPlaca() {
+        return placa;
+    }
 
-            double valorLocacao = dias * this.valorDiariaLocacao;
-            this.locacao = new Locacao(dias, valorLocacao, data, cliente);
+    @Override
+    public int getano() {
+        return ano;
+    }
+
+    @Override
+    public double getValorParaVenda() {
+        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
+        int idadeVeiculoEmAnos = anoAtual - this.ano;
+
+        double valorCalculado = this.valorDeCompra - (idadeVeiculoEmAnos * 0.15 * this.valorDeCompra);
+
+        double dezPorCentoDoValorDeCompra = this.valorDeCompra * 0.10;
+        if (valorCalculado < dezPorCentoDoValorDeCompra) {
+            return dezPorCentoDoValorDeCompra;
         }
+
+        return valorCalculado;
     }
 
-    public void devolverAluguel() {
-        if (this.estado == Estado.LOCADO) {
-            this.estado = Estado.DISPONIVEL; // ou outro estado apropriado
-            this.locacao = null;
-        }
-    }
+    @Override
+    public abstract double getValorDiariaLocacao();
 }
