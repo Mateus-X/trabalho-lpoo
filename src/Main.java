@@ -24,20 +24,10 @@ public class Main {
         // --- Demonstração de Clientes ---
         System.out.println("--- Testando Clientes ---");
 
-        Cliente cliente1 = new Cliente();
-        cliente1.setNome("Ana");
-        cliente1.setSobrenome("Silva");
-        cliente1.setCPF("111.111.111-11");
-        cliente1.setRG("11.111.111-1");
-        cliente1.setEndereco("Rua das Flores, 100");
+        Cliente cliente1 = new Cliente("Ana", "Silva", "111.111.111-11", "11.111.111-1", "Rua das Flores, 100");
         repositorio.adicionarCliente(cliente1);
 
-        Cliente cliente2 = new Cliente();
-        cliente2.setNome("Bruno");
-        cliente2.setSobrenome("Costa");
-        cliente2.setCPF("222.222.222-22");
-        cliente2.setRG("22.222.222-2");
-        cliente2.setEndereco("Av. Central, 200");
+        Cliente cliente2 = new Cliente("Bruno", "Costa", "222.222.222-22", "22.222.222-2", "Av. Central, 200");
         repositorio.adicionarCliente(cliente2);
 
         System.out.println("\nClientes Cadastrados:");
