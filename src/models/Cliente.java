@@ -51,7 +51,7 @@ public class Cliente {
         return endereco;
     }
 
-    public void setEndereco(String enderoco) {
-        this.endereco = enderoco;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 }
