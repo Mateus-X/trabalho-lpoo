@@ -7,6 +7,14 @@ public class Cliente {
     private String CPF;
     private String endereco;
 
+    public Cliente(String nome, String sobrenome, String RG, String CPF, String endereco) {
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.RG = RG;
+        this.CPF = CPF;
+        this.endereco = endereco;
+    }
+
     public String getNome() {
         return nome;
     }
