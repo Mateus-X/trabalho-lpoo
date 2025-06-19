@@ -44,38 +44,50 @@ public class Main {
         // Testando atualizar cliente
         Cliente cliente1Atualizado = repositorio.buscarClientePorCpf("111.111.111-11");
         if (cliente1Atualizado != null) {
-            cliente1Atualizado.setEndereco("Rua Nova, 300");
-            if (repositorio.atualizarCliente(cliente1Atualizado)) {
-                System.out.println("Endereço do cliente Ana atualizado para: " + repositorio.buscarClientePorCpf("111.111.111-11").getEndereco());
+            try
+            {
+                cliente1Atualizado.setEndereco("Rua Nova, 300");
+                repositorio.atualizarCliente(cliente1Atualizado);
+                System.out.println("Endereço do cliente Ana atualizado para: "
+                    + repositorio.buscarClientePorCpf("111.111.111-11").getEndereco());
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro ao atualizar cliente: " + e.getMessage());
             }
         }
-
 
         // --- Demonstração de Veículos ---
         System.out.println("\n--- Testando Veículos ---");
 
-        Automovel automovel1 = new Automovel(Marca.FIAT, Categoria.POPULAR, 35000.00, "ABC-1234", 2020, ModeloAutomovel.PALIO);
+        Automovel automovel1 = new Automovel(Marca.FIAT, Categoria.POPULAR, 35000.00, "ABC-1234", 2020,
+                ModeloAutomovel.PALIO);
         repositorio.adicionarVeiculo(automovel1);
 
-        Motocicleta motocicleta1 = new Motocicleta(Marca.HONDA, Categoria.INTERMEDIARIO, 15000.00, "DEF-5678", 2022, ModeloMotocicleta.CBR500);
+        Motocicleta motocicleta1 = new Motocicleta(Marca.HONDA, Categoria.INTERMEDIARIO, 15000.00, "DEF-5678", 2022,
+                ModeloMotocicleta.CBR500);
         repositorio.adicionarVeiculo(motocicleta1);
 
         Van van1 = new Van(Marca.MERCEDES, Categoria.LUXO, 120000.00, "GHI-9012", 2021, ModeloVan.SPRINTER);
         repositorio.adicionarVeiculo(van1);
 
-        Automovel automovel2 = new Automovel(Marca.GM, Categoria.LUXO, 90000.00, "JKL-3456", 2023, ModeloAutomovel.CIVIC);
+        Automovel automovel2 = new Automovel(Marca.GM, Categoria.LUXO, 90000.00, "JKL-3456", 2023,
+                ModeloAutomovel.CIVIC);
         repositorio.adicionarVeiculo(automovel2);
-
 
         System.out.println("\nTodos os Veículos Cadastrados:");
         for (Veiculo v : repositorio.listarTodosVeiculos()) {
             String modeloNome = "";
-            if (v instanceof Automovel) modeloNome = ((Automovel)v).getModelo().name();
-            else if (v instanceof Motocicleta) modeloNome = ((Motocicleta)v).getModelo().name();
-            else if (v instanceof Van) modeloNome = ((Van)v).getModelo().name();
+            if (v instanceof Automovel)
+                modeloNome = ((Automovel) v).getModelo().name();
+            else if (v instanceof Motocicleta)
+                modeloNome = ((Motocicleta) v).getModelo().name();
+            else if (v instanceof Van)
+                modeloNome = ((Van) v).getModelo().name();
 
-            System.out.printf("  - Placa: %s, Marca: %s, Modelo: %s, Ano: %d, Categoria: %s, Estado: %s, Diária: R$%.2f\n",
-                    v.getPlaca(), v.getMarca(), modeloNome, v.getano(), v.getCategoria(), v.getEstado(), v.getValorDiariaLocacao());
+            System.out.printf(
+                    "  - Placa: %s, Marca: %s, Modelo: %s, Ano: %d, Categoria: %s, Estado: %s, Diária: R$%.2f\n",
+                    v.getPlaca(), v.getMarca(), modeloNome, v.getano(), v.getCategoria(), v.getEstado(),
+                    v.getValorDiariaLocacao());
         }
 
         // Testando locação
@@ -92,7 +104,8 @@ public class Main {
 
         System.out.println("\nVeículos Locados:");
         for (Veiculo v : repositorio.listarVeiculosLocados()) {
-            System.out.println("  - " + v.getPlaca() + " (" + v.getEstado() + ") para " + v.getLocacao().getCliente().getNome());
+            System.out.println(
+                    "  - " + v.getPlaca() + " (" + v.getEstado() + ") para " + v.getLocacao().getCliente().getNome());
         }
 
         // Tentativa de excluir cliente com veículo locado (deve falhar)
@@ -123,7 +136,6 @@ public class Main {
             System.out.println("  - " + c.getNome() + " " + c.getSobrenome());
         }
 
-
         // --- Testando Venda ---
         System.out.println("\n--- Testando Venda ---");
         System.out.println("Valor para Venda do Automóvel JKL-3456: R$" + automovel2.getValorParaVenda());
@@ -148,14 +160,13 @@ public class Main {
             System.out.println("  - " + v.getPlaca() + " (" + v.getEstado() + ")");
         }
 
-
         // --- Testando Filtros ---
         System.out.println("\n--- Testando Filtros de Veículos ---");
         // Filtrar por tipo (Motocicleta)
         List<Veiculo> motosFiltradas = repositorio.filtrarVeiculos("Motocicleta", null, null);
         System.out.println("Motocicletas filtradas:");
         for (Veiculo v : motosFiltradas) {
-            System.out.println("  - " + v.getPlaca() + " (Modelo: " + ((Motocicleta)v).getModelo() + ")");
+            System.out.println("  - " + v.getPlaca() + " (Modelo: " + ((Motocicleta) v).getModelo() + ")");
         }
 
         // Filtrar por Categoria (LUXO)
@@ -163,10 +174,13 @@ public class Main {
         System.out.println("\nVeículos de Luxo filtrados:");
         for (Veiculo v : luxoFiltrados) {
             String modeloNome = "";
-            if (v instanceof Automovel) modeloNome = ((Automovel)v).getModelo().name();
-            else if (v instanceof Van) modeloNome = ((Van)v).getModelo().name(); // Vans de luxo
+            if (v instanceof Automovel)
+                modeloNome = ((Automovel) v).getModelo().name();
+            else if (v instanceof Van)
+                modeloNome = ((Van) v).getModelo().name(); // Vans de luxo
 
-            System.out.println("  - " + v.getPlaca() + " (Categoria: " + v.getCategoria() + ", Modelo: " + modeloNome + ")");
+            System.out.println(
+                    "  - " + v.getPlaca() + " (Categoria: " + v.getCategoria() + ", Modelo: " + modeloNome + ")");
         }
     }
 }

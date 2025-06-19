@@ -7,11 +7,10 @@ import models.enums.Categoria;
 import models.enums.Marca;
 import requests.VeiculoRequest;
 
-public class VeiculoController {
-    private RepositorioMemoria repositorioMemoria;
+public class VeiculoController extends Controller {
 
     public VeiculoController(RepositorioMemoria repositorioMemoria) {
-        this.repositorioMemoria = repositorioMemoria;
+        super(repositorioMemoria);
     }
 
     public void cadastrarVeiculo(Veiculo veiculo) {

@@ -1,51 +1,66 @@
 package controllers;
 
-import dao.RepositorioMemoria;
 import java.util.List;
+
+import dao.RepositorioMemoria;
 import models.Cliente;
 import requests.ClienteRequest;
 
-public class ClienteController {
-    private RepositorioMemoria repositorioMemoria;
+public class ClienteController extends Controller {
 
     public ClienteController(RepositorioMemoria repositorioMemoria) {
-        this.repositorioMemoria = repositorioMemoria;
+        super(repositorioMemoria);
     }
-
+    
     // Cadastrar Cliente com validação
     public void cadastrarCliente(String nome, String sobrenome, String RG, String CPF, String endereco) {
         try {
             Cliente cliente = new Cliente(nome, sobrenome, RG, CPF, endereco);
-            Cliente clienteValidado = ClienteRequest.Validar(cliente);
-            repositorioMemoria.adicionarCliente(clienteValidado);
+
+            ClienteRequest.validar(cliente);
+
+            this.repositorioMemoria.adicionarCliente(cliente);
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
-    // Listar todos os clientes
-    public List<Cliente> listarTodosClientes() {
-        return repositorioMemoria.listarTodosClientes();
-    }
-
-    // Buscar cliente por CPF
-    public Cliente buscarClientePorCpf(String cpf) {
-        return repositorioMemoria.buscarClientePorCpf(cpf);
-    }
-
-    // Atualizar cliente
-    public boolean atualizarCliente(Cliente clienteAtualizado) {
+    public Cliente buscarCliente(String CPF) {
         try {
-            Cliente clienteValidado = ClienteRequest.Validar(clienteAtualizado);
-            return repositorioMemoria.atualizarCliente(clienteValidado);
+            return this.repositorioMemoria.buscarClientePorCpf(CPF);
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro ao atualizar cliente: " + e.getMessage());
-            return false;
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 
-    // Excluir cliente
-    public boolean excluirCliente(String cpf) {
-        return repositorioMemoria.excluirCliente(cpf);
+    public void atualizarCliente(String nome, String sobrenome, String RG, String CPF, String endereco) {
+        try {
+            Cliente cliente = new Cliente(nome, sobrenome, RG, CPF, endereco);
+
+            ClienteRequest.validar(cliente);
+            this.repositorioMemoria.atualizarCliente(cliente);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void excluirCliente(String CPF) {
+        try {
+            boolean result = this.repositorioMemoria.excluirCliente(CPF);
+
+            if (result) {
+                System.out.println("Cliente excluído com sucesso.");
+            } else {
+                System.out.println("Erro interno do servidor.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public List<Cliente> listarTodosClientes() {
+        return this.repositorioMemoria.listarTodosClientes();
     }
 }

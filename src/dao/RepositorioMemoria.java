@@ -43,39 +43,42 @@ public class RepositorioMemoria {
 
     public Cliente buscarClientePorCpf(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
-            return null;
+            throw new IllegalArgumentException("CPF inválido");
         }
         for (Cliente cliente : clientes) {
             if (cliente.getCPF().equals(cpf)) {
                 return cliente;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Cliente não encontrado");
     }
 
-    public boolean atualizarCliente(Cliente clienteAtualizado) {
+    public void atualizarCliente(Cliente clienteAtualizado) {
         if (clienteAtualizado == null || clienteAtualizado.getCPF() == null) {
-            return false;
+            throw new IllegalArgumentException("Dados de atualização inválidos");
         }
+
         for (int i = 0; i < clientes.size(); i++) {
             if (clientes.get(i).getCPF().equals(clienteAtualizado.getCPF())) {
                 clientes.set(i, clienteAtualizado);
-                return true;
             }
         }
-        return false;
+
+        throw new IllegalArgumentException("Cliente não encontrado");
     }
 
     public boolean excluirCliente(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
-            return false;
+            throw new IllegalArgumentException("CPF inválido");
+        } else if (buscarClientePorCpf(cpf) == null) {
+            throw new IllegalArgumentException("Cliente não encontrado");
         }
 
         // Requisito 1.c: Deve ser possível excluir um cliente que não possua veículos locados. 
         for (Veiculo veiculo : veiculos) {
             Locacao locacao = veiculo.getLocacao();
             if (locacao != null && locacao.getCliente() != null && locacao.getCliente().getCPF().equals(cpf)) {
-                return false; // Cliente possui veículo locado, não pode ser excluído 
+                throw new IllegalArgumentException("Cliente possui veículos locados."); 
             }
         }
 
@@ -84,7 +87,7 @@ public class RepositorioMemoria {
             clientes.remove(clienteParaRemover);
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("CPF inválido");
     }
 
     /*
@@ -103,14 +106,16 @@ public class RepositorioMemoria {
 
     public Veiculo buscarVeiculoPorPlaca(String placa) {
         if (placa == null || placa.trim().isEmpty()) {
-            return null;
+            throw new IllegalArgumentException("Placa inválida");
         }
+
         for (Veiculo veiculo : veiculos) {
             if (veiculo.getPlaca().equals(placa)) {
                 return veiculo;
             }
         }
-        return null;
+        
+        throw new IllegalArgumentException("Veículo não encontrado");
     }
 
     public List<Veiculo> listarVeiculosDisponiveis() {
@@ -175,9 +180,9 @@ public class RepositorioMemoria {
             veiculos.remove(veiculoParaRemover);
             return true;
         } else if (veiculoParaRemover != null) {
-            // Veículo existe, mas não está no estado VENDIDO, não pode ser removido
-            return false;
+            throw new IllegalArgumentException("Veículo não pode ser removido, pois não está vendido.");
         }
-        return false; // Veículo não encontrado
+        
+        throw new IllegalArgumentException("Veículo não encontrado.");
     }
 }

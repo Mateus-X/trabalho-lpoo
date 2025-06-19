@@ -29,13 +29,18 @@ public abstract class Veiculo implements VeiculoI {
 
     @Override
     public void locar(int dias, Calendar data, Cliente cliente) {
-        if (this.estado == Estado.DISPONIVEL) {
-            this.estado = Estado.LOCADO;
+        try {
+            if (this.estado != Estado.DISPONIVEL) {
+                throw new IllegalStateException("Veículo está atualmente " + this.estado.toString().toLowerCase() + ".");
+            }
+
             double valorLocacao = dias * this.getValorDiariaLocacao();
             this.locacao = new Locacao(dias, valorLocacao, data, cliente);
-        } else {
-            System.out.println("Não foi possível locar o veículo. Estado atual: " + this.estado);
+            this.estado = Estado.LOCADO;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     @Override

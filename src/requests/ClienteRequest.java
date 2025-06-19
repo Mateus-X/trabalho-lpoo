@@ -3,7 +3,7 @@ package requests;
 import models.Cliente;
 
 public class ClienteRequest {
-    public static Cliente Validar(Cliente cliente) throws IllegalArgumentException {
+    public static void validar(Cliente cliente) throws IllegalArgumentException {
         if (cliente.getNome() == null || cliente.getNome().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
         }
@@ -23,13 +23,15 @@ public class ClienteRequest {
         if (cliente.getEndereco() == null || cliente.getEndereco().trim().isEmpty()) {
             throw new IllegalArgumentException("Endereço não pode ser vazio");
         }
+    }
 
-        cliente.setNome(cliente.getNome().trim());
-        cliente.setSobrenome(cliente.getSobrenome().trim());
-        cliente.setRG(cliente.getRG().trim());
-        cliente.setCPF(cliente.getCPF().trim());
-        cliente.setEndereco(cliente.getEndereco().trim());
-
-        return cliente;
+    public static void validarCpf(String cpf) throws IllegalArgumentException {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            throw new IllegalArgumentException("CPF não pode ser vazio");
+        }
+        
+        if (!cpf.matches("\\d{11}")) {
+            throw new IllegalArgumentException("CPF deve conter 11 dígitos numéricos");
+        }
     }
 }

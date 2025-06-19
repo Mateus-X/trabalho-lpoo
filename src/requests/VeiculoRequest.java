@@ -4,10 +4,10 @@ import models.Veiculo;
 
 public class VeiculoRequest {
     public static Veiculo validar(Veiculo veiculo) throws IllegalArgumentException {
-    if (veiculo.getPlaca() == null || veiculo.getPlaca().trim().isEmpty()) {
-    throw new IllegalArgumentException("Placa não pode ser vazia.");
-    }
-    if (veiculo.getMarca() == null) {
+        if (veiculo.getPlaca() == null || veiculo.getPlaca().trim().isEmpty()) {
+            throw new IllegalArgumentException("Placa não pode ser vazia.");
+        }
+        if (veiculo.getMarca() == null) {
             throw new IllegalArgumentException("Marca não pode ser nula.");
         }
 
@@ -24,5 +24,16 @@ public class VeiculoRequest {
         }
 
         return veiculo;
+    }
+
+
+    public static void validarPlaca(String placa) throws IllegalArgumentException {
+        if (placa == null || placa.trim().isEmpty()) {
+            throw new IllegalArgumentException("Placa não pode ser vazia.");
+        }
+        
+        if (!placa.matches("[A-Z]{3}-[0-9]{4}")) {
+            throw new IllegalArgumentException("Placa deve estar no formato AAA-0000.");
+        }
     }
 }
