@@ -3,20 +3,31 @@ package views;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import controllers.ClienteController;
+import models.Cliente;
+import views.tables.ClienteTableModel;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ClienteView extends JFrame {
     private JTextField txtNome, txtSobrenome, txtRG, txtCPF, txtEndereco;
     private JButton btnAdicionar, btnAtualizar, btnExcluir;
     private JTable tblClientes;
     private ClienteTableModel tableModel;
+    private ClienteController clienteController;
     
-    public ClienteView() {
+    public ClienteView(ClienteController clienteController) {
         super("Gerenciamento de Clientes");
+        this.clienteController = clienteController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
         
         initUI();
+        addListeners();
+        atualizarTabela();
     }
     
     private void initUI() {
@@ -83,6 +94,65 @@ public class ClienteView extends JFrame {
         
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         return tablePanel;
+    }
+    
+    private void addListeners() {
+        btnAdicionar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                clienteController.cadastrarCliente(
+                    txtNome.getText(),
+                    txtSobrenome.getText(),
+                    txtRG.getText(),
+                    txtCPF.getText(),
+                    txtEndereco.getText()
+                );
+                atualizarTabela();
+            }
+        });
+        btnAtualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = tblClientes.getSelectedRow();
+                if (row >= 0) {
+                    clienteController.atualizarCliente(
+                        txtNome.getText(),
+                        txtSobrenome.getText(),
+                        txtRG.getText(),
+                        txtCPF.getText(),
+                        txtEndereco.getText()
+                    );
+                    atualizarTabela();
+                }
+            }
+        });
+        btnExcluir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = tblClientes.getSelectedRow();
+                if (row >= 0) {
+                    String cpf = (String) tblClientes.getValueAt(row, 3); // Supondo que CPF é a 4ª coluna
+                    clienteController.excluirCliente(cpf);
+                    atualizarTabela();
+                }
+            }
+        });
+        tblClientes.getSelectionModel().addListSelectionListener(e -> {
+            int row = tblClientes.getSelectedRow();
+            if (row >= 0) {
+                txtNome.setText((String) tblClientes.getValueAt(row, 0));
+                txtSobrenome.setText((String) tblClientes.getValueAt(row, 1));
+                txtRG.setText((String) tblClientes.getValueAt(row, 2));
+                txtCPF.setText((String) tblClientes.getValueAt(row, 3));
+                txtEndereco.setText((String) tblClientes.getValueAt(row, 4));
+            }
+        });
+    }
+
+    private void atualizarTabela() {
+        List<Cliente> clientes = clienteController.listarTodosClientes();
+        tableModel.setClientes(clientes); // Supondo que ClienteTableModel tem esse método
+        tableModel.fireTableDataChanged();
     }
     
     // Getters

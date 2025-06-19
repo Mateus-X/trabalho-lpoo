@@ -2,6 +2,9 @@ package views;
 
 import javax.swing.*;
 import java.awt.*;
+import controllers.ClienteController;
+import controllers.VeiculoController;
+import controllers.LocacaoController;
 
 public class MainFrame extends JFrame {
     private JButton btnClientes;
@@ -9,14 +12,21 @@ public class MainFrame extends JFrame {
     private JButton btnLocarVeiculo;
     private JButton btnDevolverVeiculo;
     private JButton btnVenderVeiculo;
+    private ClienteController clienteController;
+    private VeiculoController veiculoController;
+    private LocacaoController locacaoController;
     
-    public MainFrame() {
+    public MainFrame(ClienteController clienteController, VeiculoController veiculoController, LocacaoController locacaoController) {
         super("Sistema de Locação de Veículos");
+        this.clienteController = clienteController;
+        this.veiculoController = veiculoController;
+        this.locacaoController = locacaoController;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
         
         initUI();
+        addListeners();
     }
     
     private void initUI() {
@@ -62,6 +72,29 @@ public class MainFrame extends JFrame {
         footer.add(new JLabel("© 2025 - Sistema de Locação de Veículos"));
         footer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return footer;
+    }
+    
+    private void addListeners() {
+        btnClientes.addActionListener(e -> {
+            ClienteView clienteView = new ClienteView(clienteController);
+            clienteView.setVisible(true);
+        });
+        btnAdicionarVeiculo.addActionListener(e -> {
+            AdicionarVeiculoView adicionarVeiculoView = new AdicionarVeiculoView(veiculoController);
+            adicionarVeiculoView.setVisible(true);
+        });
+        btnLocarVeiculo.addActionListener(e -> {
+            LocarVeiculoView locarVeiculoView = new LocarVeiculoView(locacaoController, veiculoController, clienteController);
+            locarVeiculoView.setVisible(true);
+        });
+        btnDevolverVeiculo.addActionListener(e -> {
+            DevolverVeiculoView devolverVeiculoView = new DevolverVeiculoView(locacaoController, veiculoController);
+            devolverVeiculoView.setVisible(true);
+        });
+        // btnVenderVeiculo.addActionListener(e -> {
+        //     VenderVeiculoView venderVeiculoView = new VenderVeiculoView(veiculoController);
+        //     venderVeiculoView.setVisible(true);
+        // });
     }
     
     // Getters para os botões
