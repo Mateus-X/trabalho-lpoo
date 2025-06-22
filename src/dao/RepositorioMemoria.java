@@ -26,14 +26,14 @@ public class RepositorioMemoria {
     }
 
     /*
-     * Métodos para Gerenciamento de Clientes
+     * Metodos para Gerenciamento de Clientes
      */
 
     public void adicionarCliente(Cliente cliente) throws IllegalArgumentException {
         if (cliente != null && buscarClientePorCpf(cliente.getCPF()) == null) {
             this.clientes.add(cliente);
         } else {
-            throw new IllegalArgumentException("Cliente já cadastrado ou inválido.");
+            throw new IllegalArgumentException("Cliente ja cadastrado ou invalido.");
         }
     }
 
@@ -43,19 +43,19 @@ public class RepositorioMemoria {
 
     public Cliente buscarClientePorCpf(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
-            throw new IllegalArgumentException("CPF inválido");
+            throw new IllegalArgumentException("CPF invalido");
         }
         for (Cliente cliente : clientes) {
             if (cliente.getCPF().equals(cpf)) {
                 return cliente;
             }
         }
-        throw new IllegalArgumentException("Cliente não encontrado");
+        throw new IllegalArgumentException("Cliente nao encontrado");
     }
 
     public void atualizarCliente(Cliente clienteAtualizado) {
         if (clienteAtualizado == null || clienteAtualizado.getCPF() == null) {
-            throw new IllegalArgumentException("Dados de atualização inválidos");
+            throw new IllegalArgumentException("Dados de atualizacao invalidos");
         }
 
         for (int i = 0; i < clientes.size(); i++) {
@@ -64,21 +64,21 @@ public class RepositorioMemoria {
             }
         }
 
-        throw new IllegalArgumentException("Cliente não encontrado");
+        throw new IllegalArgumentException("Cliente nao encontrado");
     }
 
     public boolean excluirCliente(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
-            throw new IllegalArgumentException("CPF inválido");
+            throw new IllegalArgumentException("CPF invalido");
         } else if (buscarClientePorCpf(cpf) == null) {
-            throw new IllegalArgumentException("Cliente não encontrado");
+            throw new IllegalArgumentException("Cliente nao encontrado");
         }
 
-        // Requisito 1.c: Deve ser possível excluir um cliente que não possua veículos locados. 
+        // Requisito 1.c: Deve ser possivel excluir um cliente que nao possua veiculos locados. 
         for (Veiculo veiculo : veiculos) {
             Locacao locacao = veiculo.getLocacao();
             if (locacao != null && locacao.getCliente() != null && locacao.getCliente().getCPF().equals(cpf)) {
-                throw new IllegalArgumentException("Cliente possui veículos locados."); 
+                throw new IllegalArgumentException("Cliente possui veiculos locados."); 
             }
         }
 
@@ -87,11 +87,11 @@ public class RepositorioMemoria {
             clientes.remove(clienteParaRemover);
             return true;
         }
-        throw new IllegalArgumentException("CPF inválido");
+        throw new IllegalArgumentException("CPF invalido");
     }
 
     /*
-     * Métodos para Gerenciamento de Veículos
+     * Metodos para Gerenciamento de Veiculos
      */
 
     public void adicionarVeiculo(Veiculo veiculo) {
@@ -106,7 +106,7 @@ public class RepositorioMemoria {
 
     public Veiculo buscarVeiculoPorPlaca(String placa) {
         if (placa == null || placa.trim().isEmpty()) {
-            throw new IllegalArgumentException("Placa inválida");
+            throw new IllegalArgumentException("Placa invalida");
         }
 
         for (Veiculo veiculo : veiculos) {
@@ -115,7 +115,7 @@ public class RepositorioMemoria {
             }
         }
         
-        throw new IllegalArgumentException("Veículo não encontrado");
+        throw new IllegalArgumentException("Veiculo nao encontrado");
     }
 
     public List<Veiculo> listarVeiculosDisponiveis() {
@@ -137,13 +137,13 @@ public class RepositorioMemoria {
     }
 
     /**
-     * Filtra veículos por tipo, marca e/ou categoria. 
-     * Os parâmetros podem ser nulos para indicar que não são critérios de filtro.
+     * Filtra veiculos por tipo, marca e/ou categoria. 
+     * Os parametros podem ser nulos para indicar que nao sao criterios de filtro.
      *
      * @param tipo String ("Automovel", "Motocicleta", "Van") ou null
      * @param marca Enum Marca ou null
      * @param categoria Enum Categoria ou null
-     * @return Lista de veículos filtrados.
+     * @return Lista de veiculos filtrados.
      */
     public List<Veiculo> filtrarVeiculos(String tipo, Marca marca, Categoria categoria) {
         return veiculos.stream()
@@ -157,7 +157,7 @@ public class RepositorioMemoria {
                         } else if (tipo.equalsIgnoreCase("Van")) {
                             tipoMatch = veiculo instanceof Van;
                         } else {
-                            tipoMatch = false; // Tipo inválido
+                            tipoMatch = false; // Tipo invalido
                         }
                     }
 
@@ -170,9 +170,9 @@ public class RepositorioMemoria {
     }
 
     /**
-     * Remove um veículo da memória (usado após a venda, por exemplo).
-     * @param placa A placa do veículo a ser removido.
-     * @return true se o veículo foi removido, false caso contrário.
+     * Remove um veiculo da memoria (usado apos a venda, por exemplo).
+     * @param placa A placa do veiculo a ser removido.
+     * @return true se o veiculo foi removido, false caso contrario.
      */
     public boolean removerVeiculo(String placa) {
         Veiculo veiculoParaRemover = buscarVeiculoPorPlaca(placa);
@@ -180,9 +180,9 @@ public class RepositorioMemoria {
             veiculos.remove(veiculoParaRemover);
             return true;
         } else if (veiculoParaRemover != null) {
-            throw new IllegalArgumentException("Veículo não pode ser removido, pois não está vendido.");
+            throw new IllegalArgumentException("Veiculo nao pode ser removido, pois nao esta vendido.");
         }
         
-        throw new IllegalArgumentException("Veículo não encontrado.");
+        throw new IllegalArgumentException("Veiculo nao encontrado.");
     }
 }

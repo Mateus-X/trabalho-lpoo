@@ -12,7 +12,7 @@ public class ClienteController extends Controller {
         super(repositorioMemoria);
     }
     
-    // Cadastrar Cliente com validação
+    // Cadastrar Cliente com validacao
     public void cadastrarCliente(String nome, String sobrenome, String RG, String CPF, String endereco) {
         try {
             Cliente cliente = new Cliente(nome, sobrenome, RG, CPF, endereco);
@@ -51,7 +51,7 @@ public class ClienteController extends Controller {
             boolean result = this.repositorioMemoria.excluirCliente(CPF);
 
             if (result) {
-                System.out.println("Cliente excluído com sucesso.");
+                System.out.println("Cliente excluido com sucesso.");
             } else {
                 System.out.println("Erro interno do servidor.");
             }

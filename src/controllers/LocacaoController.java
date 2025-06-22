@@ -25,7 +25,7 @@ public class LocacaoController extends Controller {
 
             veiculo.locar(dias, data, cliente);
 
-            System.out.println("Locação realizada com sucesso.");
+            System.out.println("Locacao realizada com sucesso.");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }

@@ -34,7 +34,7 @@ public class LocarVeiculoView extends JFrame {
     private VeiculoController veiculoController;
     
     public LocarVeiculoView(LocacaoController locacaoController, VeiculoController veiculoController, ClienteController clienteController) {
-        super("Locação de Veículos");
+        super("Locacao de Veiculos");
         this.locacaoController = locacaoController;
         this.veiculoController = veiculoController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -59,7 +59,7 @@ public class LocarVeiculoView extends JFrame {
     
     private JPanel createHeader() {
         JPanel header = new JPanel();
-        header.add(new JLabel("Locação de Veículos"));
+        header.add(new JLabel("Locacao de Veiculos"));
         return header;
     }
     
@@ -70,8 +70,8 @@ public class LocarVeiculoView extends JFrame {
         txtBuscaCliente = new JTextField();
         filterPanel.add(txtBuscaCliente);
         
-        filterPanel.add(new JLabel("Tipo de Veículo:"));
-        cbTipoVeiculo = new JComboBox<>(new String[]{"Todos", "Automóvel", "Motocicleta", "Van"});
+        filterPanel.add(new JLabel("Tipo de Veiculo:"));
+        cbTipoVeiculo = new JComboBox<>(new String[]{"Todos", "Automovel", "Motocicleta", "Van"});
         filterPanel.add(cbTipoVeiculo);
         
         filterPanel.add(new JLabel("Marca:"));
@@ -82,11 +82,11 @@ public class LocarVeiculoView extends JFrame {
         cbCategoria = new JComboBox<>(Categoria.values());
         filterPanel.add(cbCategoria);
         
-        filterPanel.add(new JLabel("Dias de Locação:"));
+        filterPanel.add(new JLabel("Dias de Locacao:"));
         txtDiasLocacao = new JFormattedTextField(NumberFormat.getIntegerInstance());
         filterPanel.add(txtDiasLocacao);
         
-        filterPanel.add(new JLabel("Data de Locação:"));
+        filterPanel.add(new JLabel("Data de Locacao:"));
         txtDataLocacao = new JFormattedTextField();
         try {
             MaskFormatter dateFormatter = new MaskFormatter("##/##/####");
@@ -96,7 +96,7 @@ public class LocarVeiculoView extends JFrame {
         }
         filterPanel.add(txtDataLocacao);
         
-        btnLocar = new JButton("Locar Veículo");
+        btnLocar = new JButton("Locar Veiculo");
         filterPanel.add(btnLocar);
         
         return filterPanel;
@@ -119,13 +119,13 @@ public class LocarVeiculoView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int row = tblVeiculos.getSelectedRow();
                 if (row >= 0) {
-                    String placa = (String) tblVeiculos.getValueAt(row, 0); // Supondo que placa é a 1ª coluna
+                    String placa = (String) tblVeiculos.getValueAt(row, 0); // Supondo que placa e a 1ª coluna
                     String cpf = txtBuscaCliente.getText();
                     int dias = 1;
                     try {
                         dias = Integer.parseInt(txtDiasLocacao.getText().replaceAll("[^0-9]", ""));
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Dias de locação inválido.");
+                        JOptionPane.showMessageDialog(null, "Dias de locacao invalido.");
                         return;
                     }
                     Calendar data = Calendar.getInstance();
@@ -133,7 +133,7 @@ public class LocarVeiculoView extends JFrame {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         data.setTime(sdf.parse(txtDataLocacao.getText()));
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Data inválida.");
+                        JOptionPane.showMessageDialog(null, "Data invalida.");
                         return;
                     }
                     locacaoController.locar(cpf, data, placa, dias);
@@ -152,7 +152,7 @@ public class LocarVeiculoView extends JFrame {
         Marca marca = (Marca) cbMarca.getSelectedItem();
         Categoria categoria = (Categoria) cbCategoria.getSelectedItem();
         List<Veiculo> veiculos = veiculoController.filtrarVeiculos(tipo, marca, categoria);
-        tableModel.setVeiculos(veiculos); // Supondo que VeiculoTableModel tem esse método
+        tableModel.setVeiculos(veiculos); // Supondo que VeiculoTableModel tem esse metodo
         tableModel.fireTableDataChanged();
     }
     

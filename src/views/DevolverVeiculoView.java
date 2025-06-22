@@ -19,7 +19,7 @@ public class DevolverVeiculoView extends JFrame {
     private VeiculoController veiculoController;
 
     public DevolverVeiculoView(LocacaoController locacaoController, VeiculoController veiculoController) {
-        super("Devolução de Veículos");
+        super("Devolucao de Veiculos");
         this.veiculoController = veiculoController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
@@ -35,12 +35,12 @@ public class DevolverVeiculoView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int row = tblVeiculosLocados.getSelectedRow();
                 if (row >= 0) {
-                    String placa = (String) tblVeiculosLocados.getValueAt(row, 0); // Supondo que placa é a 1ª coluna
+                    String placa = (String) tblVeiculosLocados.getValueAt(row, 0); // Supondo que placa e a 1ª coluna
                     Veiculo v = veiculoController.buscarVeiculoPorPlaca(placa);
                     if (v != null) {
                         v.devolver();
                         atualizarTabela();
-                        JOptionPane.showMessageDialog(null, "Veículo devolvido!");
+                        JOptionPane.showMessageDialog(null, "Veiculo devolvido!");
                     }
                 }
             }
@@ -66,7 +66,7 @@ public class DevolverVeiculoView extends JFrame {
 
     private JPanel createHeader() {
         JPanel header = new JPanel();
-        header.add(new JLabel("Veículos Locados"));
+        header.add(new JLabel("Veiculos Locados"));
         return header;
     }
 
@@ -83,7 +83,7 @@ public class DevolverVeiculoView extends JFrame {
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
-        btnDevolver = new JButton("Devolver Veículo");
+        btnDevolver = new JButton("Devolver Veiculo");
         buttonPanel.add(btnDevolver);
         return buttonPanel;
     }

@@ -22,7 +22,7 @@
 //     private VeiculoController veiculoController;
 
 //     public VenderVeiculoView(VeiculoController veiculoController) {
-//         super("Venda de Veículos");
+//         super("Venda de Veiculos");
 //         this.veiculoController = veiculoController;
 //         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //         setSize(900, 500);
@@ -50,13 +50,13 @@
 //             public void actionPerformed(ActionEvent e) {
 //                 int row = tblVeiculos.getSelectedRow();
 //                 if (row >= 0) {
-//                     String placa = (String) tblVeiculos.getValueAt(row, 0); // Supondo que placa é a 1ª coluna
+//                     String placa = (String) tblVeiculos.getValueAt(row, 0); // Supondo que placa e a 1ª coluna
 //                     Veiculo v = veiculoController.buscarVeiculoPorPlaca(placa);
 //                     if (v != null) {
 //                         v.vender();
 //                         veiculoController.removerVeiculo(placa);
 //                         atualizarTabela();
-//                         JOptionPane.showMessageDialog(null, "Veículo vendido!");
+//                         JOptionPane.showMessageDialog(null, "Veiculo vendido!");
 //                     }
 //                 }
 //             }
@@ -78,15 +78,15 @@
 
 //     private JPanel createHeader() {
 //         JPanel header = new JPanel();
-//         header.add(new JLabel("Venda de Veículos"));
+//         header.add(new JLabel("Venda de Veiculos"));
 //         return header;
 //     }
 
 //     private JPanel createFilterPanel() {
 //         JPanel filterPanel = new JPanel(new GridLayout(1, 6, 5, 5));
 
-//         filterPanel.add(new JLabel("Tipo de Veículo:"));
-//         cbTipoVeiculo = new JComboBox<>(new String[]{"Todos", "Automóvel", "Motocicleta", "Van"});
+//         filterPanel.add(new JLabel("Tipo de Veiculo:"));
+//         cbTipoVeiculo = new JComboBox<>(new String[]{"Todos", "Automovel", "Motocicleta", "Van"});
 //         filterPanel.add(cbTipoVeiculo);
 
 //         filterPanel.add(new JLabel("Marca:"));
@@ -97,7 +97,7 @@
 //         cbCategoria = new JComboBox<>(Categoria.values());
 //         filterPanel.add(cbCategoria);
 
-//         btnVender = new JButton("Vender Veículo");
+//         btnVender = new JButton("Vender Veiculo");
 //         filterPanel.add(btnVender);
 
 //         return filterPanel;

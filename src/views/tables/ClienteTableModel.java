@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ClienteTableModel extends AbstractTableModel {
     private List<Cliente> clientes = new ArrayList<>();
-    private final String[] colunas = {"Nome", "Sobrenome", "RG", "CPF", "Endereço"};
+    private final String[] colunas = {"Nome", "Sobrenome", "RG", "CPF", "Endereco"};
 
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;

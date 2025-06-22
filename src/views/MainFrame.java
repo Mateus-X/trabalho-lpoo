@@ -17,7 +17,7 @@ public class MainFrame extends JFrame {
     private LocacaoController locacaoController;
     
     public MainFrame(ClienteController clienteController, VeiculoController veiculoController, LocacaoController locacaoController) {
-        super("Sistema de Locação de Veículos");
+        super("Sistema de Locacao de Veiculos");
         this.clienteController = clienteController;
         this.veiculoController = veiculoController;
         this.locacaoController = locacaoController;
@@ -30,10 +30,8 @@ public class MainFrame extends JFrame {
     }
     
     private void initUI() {
-        // Painel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
         
-        // Adiciona componentes
         mainPanel.add(createHeader(), BorderLayout.NORTH);
         mainPanel.add(createContent(), BorderLayout.CENTER);
         mainPanel.add(createFooter(), BorderLayout.SOUTH);
@@ -43,7 +41,7 @@ public class MainFrame extends JFrame {
     
     private JPanel createHeader() {
         JPanel header = new JPanel();
-        header.add(new JLabel("Sistema de Locação de Veículos", SwingConstants.CENTER));
+        header.add(new JLabel("Sistema de Locacao de Veiculos", SwingConstants.CENTER));
         header.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return header;
     }
@@ -53,10 +51,10 @@ public class MainFrame extends JFrame {
         content.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         
         btnClientes = new JButton("Gerenciar Clientes");
-        btnAdicionarVeiculo = new JButton("Adicionar Veículo");
-        btnLocarVeiculo = new JButton("Locar Veículo");
-        btnDevolverVeiculo = new JButton("Devolver Veículo");
-        btnVenderVeiculo = new JButton("Vender Veículo");
+        btnAdicionarVeiculo = new JButton("Adicionar Veiculo");
+        btnLocarVeiculo = new JButton("Locar Veiculo");
+        btnDevolverVeiculo = new JButton("Devolver Veiculo");
+        btnVenderVeiculo = new JButton("Vender Veiculo");
         
         content.add(btnClientes);
         content.add(btnAdicionarVeiculo);
@@ -69,7 +67,7 @@ public class MainFrame extends JFrame {
     
     private JPanel createFooter() {
         JPanel footer = new JPanel();
-        footer.add(new JLabel("© 2025 - Sistema de Locação de Veículos"));
+        footer.add(new JLabel("© 2025 - Sistema de Locacao de Veiculos"));
         footer.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return footer;
     }
@@ -97,7 +95,7 @@ public class MainFrame extends JFrame {
         // });
     }
     
-    // Getters para os botões
+    // Getters para os botoes
     public JButton getBtnClientes() { return btnClientes; }
     public JButton getBtnAdicionarVeiculo() { return btnAdicionarVeiculo; }
     public JButton getBtnLocarVeiculo() { return btnLocarVeiculo; }

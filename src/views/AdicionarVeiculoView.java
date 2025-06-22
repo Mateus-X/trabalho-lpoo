@@ -32,7 +32,7 @@ public class AdicionarVeiculoView extends JFrame {
     private VeiculoController veiculoController;
 
     public AdicionarVeiculoView(VeiculoController veiculoController) {
-        super("Adicionar Veículo");
+        super("Adicionar Veiculo");
         this.veiculoController = veiculoController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(600, 500);
@@ -54,15 +54,15 @@ public class AdicionarVeiculoView extends JFrame {
 
     private JPanel createHeader() {
         JPanel header = new JPanel();
-        header.add(new JLabel("Cadastro de Veículos"));
+        header.add(new JLabel("Cadastro de Veiculos"));
         return header;
     }
 
     private JPanel createFormPanel() {
         JPanel formPanel = new JPanel(new GridLayout(8, 2, 5, 5));
 
-        formPanel.add(new JLabel("Tipo de Veículo:"));
-        cbTipoVeiculo = new JComboBox<>(new String[]{"Automóvel", "Motocicleta", "Van"});
+        formPanel.add(new JLabel("Tipo de Veiculo:"));
+        cbTipoVeiculo = new JComboBox<>(new String[]{"Automovel", "Motocicleta", "Van"});
         formPanel.add(cbTipoVeiculo);
 
         formPanel.add(new JLabel("Marca:"));
@@ -103,7 +103,7 @@ public class AdicionarVeiculoView extends JFrame {
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
-        btnAdicionar = new JButton("Adicionar Veículo");
+        btnAdicionar = new JButton("Adicionar Veiculo");
         buttonPanel.add(btnAdicionar);
         return buttonPanel;
     }
@@ -120,22 +120,22 @@ public class AdicionarVeiculoView extends JFrame {
                 try {
                     valorCompra = NumberFormat.getCurrencyInstance().parse(txtValorCompra.getText()).doubleValue();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Valor de compra inválido.");
+                    JOptionPane.showMessageDialog(null, "Valor de compra invalido.");
                     return;
                 }
                 String placa = txtPlaca.getText();
                 int ano = (int) spAno.getValue();
                 Object modelo = cbModelo.getSelectedItem();
-                if (tipo.equals("Automóvel") && modelo instanceof ModeloAutomovel) {
+                if (tipo.equals("Automovel") && modelo instanceof ModeloAutomovel) {
                     veiculoController.cadastrarVeiculo(new Automovel(marca, categoria, valorCompra, placa, ano, (ModeloAutomovel) modelo));
                 } else if (tipo.equals("Motocicleta") && modelo instanceof ModeloMotocicleta) {
                     veiculoController.cadastrarVeiculo(new Motocicleta(marca, categoria, valorCompra, placa, ano, (ModeloMotocicleta) modelo));
                 } else if (tipo.equals("Van") && modelo instanceof ModeloVan) {
                     veiculoController.cadastrarVeiculo(new Van(marca, categoria, valorCompra, placa, ano, (ModeloVan) modelo));
                 } else {
-                    JOptionPane.showMessageDialog(null, "Selecione um modelo válido.");
+                    JOptionPane.showMessageDialog(null, "Selecione um modelo valido.");
                 }
-                JOptionPane.showMessageDialog(null, "Veículo cadastrado!");
+                JOptionPane.showMessageDialog(null, "Veiculo cadastrado!");
             }
         });
         atualizarModelos();
@@ -144,7 +144,7 @@ public class AdicionarVeiculoView extends JFrame {
     private void atualizarModelos() {
         String tipo = (String) cbTipoVeiculo.getSelectedItem();
         DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>();
-        if (tipo.equals("Automóvel")) {
+        if (tipo.equals("Automovel")) {
             for (ModeloAutomovel m : ModeloAutomovel.values()) model.addElement(m);
         } else if (tipo.equals("Motocicleta")) {
             for (ModeloMotocicleta m : ModeloMotocicleta.values()) model.addElement(m);

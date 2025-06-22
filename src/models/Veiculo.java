@@ -31,7 +31,7 @@ public abstract class Veiculo implements VeiculoI {
     public void locar(int dias, Calendar data, Cliente cliente) {
         try {
             if (this.estado != Estado.DISPONIVEL) {
-                throw new IllegalStateException("Veículo está atualmente " + this.estado.toString().toLowerCase() + ".");
+                throw new IllegalStateException("Veiculo esta atualmente " + this.estado.toString().toLowerCase() + ".");
             }
 
             double valorLocacao = dias * this.getValorDiariaLocacao();
@@ -49,7 +49,7 @@ public abstract class Veiculo implements VeiculoI {
             this.estado = Estado.VENDIDO;
             this.locacao = null;
         } else {
-            System.out.println("Não foi possível vender o veículo. Estado atual: " + this.estado);
+            System.out.println("Nao foi possivel vender o veiculo. Estado atual: " + this.estado);
         }
     }
 
@@ -59,7 +59,7 @@ public abstract class Veiculo implements VeiculoI {
             this.estado = Estado.DISPONIVEL;
             this.locacao = null;
         } else {
-            System.out.println("Não foi possível devolver o veículo. Estado atual: " + this.estado);
+            System.out.println("Nao foi possivel devolver o veiculo. Estado atual: " + this.estado);
         }
     }
 

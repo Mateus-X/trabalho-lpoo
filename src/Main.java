@@ -4,7 +4,7 @@ import controllers.VeiculoController;
 import controllers.LocacaoController;
 import views.MainFrame;
 
-// TODO : Trocar tudo que tem acento e Ç por caracteres sem acento
+// TODO : Trocar tudo que tem acento e c por caracteres sem acento
 
 // TODO : Validar fluxos
 

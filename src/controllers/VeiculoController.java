@@ -18,7 +18,7 @@ public class VeiculoController extends Controller {
             Veiculo veiculoValidado = VeiculoRequest.validar(veiculo);
             repositorioMemoria.adicionarVeiculo(veiculoValidado);
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro ao cadastrar veículo: " + e.getMessage());
+            System.out.println("Erro ao cadastrar veiculo: " + e.getMessage());
         }
     }
 

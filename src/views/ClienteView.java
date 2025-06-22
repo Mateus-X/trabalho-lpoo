@@ -66,7 +66,7 @@ public class ClienteView extends JFrame {
         txtCPF = new JTextField();
         formPanel.add(txtCPF);
         
-        formPanel.add(new JLabel("Endereço:"));
+        formPanel.add(new JLabel("Endereco:"));
         txtEndereco = new JTextField();
         formPanel.add(txtEndereco);
         
@@ -131,7 +131,7 @@ public class ClienteView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int row = tblClientes.getSelectedRow();
                 if (row >= 0) {
-                    String cpf = (String) tblClientes.getValueAt(row, 3); // Supondo que CPF é a 4ª coluna
+                    String cpf = (String) tblClientes.getValueAt(row, 3); // Supondo que CPF e a 4ª coluna
                     clienteController.excluirCliente(cpf);
                     atualizarTabela();
                 }
@@ -151,7 +151,7 @@ public class ClienteView extends JFrame {
 
     private void atualizarTabela() {
         List<Cliente> clientes = clienteController.listarTodosClientes();
-        tableModel.setClientes(clientes); // Supondo que ClienteTableModel tem esse método
+        tableModel.setClientes(clientes); // Supondo que ClienteTableModel tem esse metodo
         tableModel.fireTableDataChanged();
     }
     
