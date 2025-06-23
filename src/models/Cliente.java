@@ -8,11 +8,11 @@ public class Cliente {
     private String endereco;
 
     public Cliente(String nome, String sobrenome, String RG, String CPF, String endereco) {
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.RG = RG;
-        this.CPF = CPF;
-        this.endereco = endereco;
+        this.nome = nome.trim();
+        this.sobrenome = sobrenome.trim();
+        this.RG = RG.trim();
+        this.CPF = CPF.trim();
+        this.endereco = endereco.trim();
     }
 
     public String getNome() {

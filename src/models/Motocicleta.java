@@ -14,13 +14,13 @@ public class Motocicleta extends Veiculo {
         this.modelo = modelo;
     }
 
-    // Método getModelo() específico para Motocicleta
+    // Metodo getModelo() especifico para Motocicleta
     public ModeloMotocicleta getModelo() {
         return modelo;
     }
 
     @Override
-    public double getValorDiariaLocacao() { // Implementa o método abstrato de Veiculo
+    public double getValorDiariaLocacao() { // Implementa o metodo abstrato de Veiculo
         switch (this.getCategoria()) {
             case POPULAR:
                 return 70.00; 

@@ -12,16 +12,16 @@ public interface VeiculoI {
 
     /**
      * Muda estado para LOCADO.
-     * Cria uma instância de Locacao e armazena no atributo locacao.
-     * Chama o método getValorDiariaLocacao para calcular o valor da locação.
-     * @param dias Quantidade de dias da locação.
-     * @param data Data de início da locação.
-     * @param cliente Cliente que está locando o veículo.
+     * Cria uma instancia de Locacao e armazena no atributo locacao.
+     * Chama o metodo getValorDiariaLocacao para calcular o valor da locacao.
+     * @param dias Quantidade de dias da locacao.
+     * @param data Data de inicio da locacao.
+     * @param cliente Cliente que esta locando o veiculo.
      */
     void locar (int dias, Calendar data, Cliente cliente);
 
     /**
-     * Muda estado para VENDIDO e não pode mais ser alugado.
+     * Muda estado para VENDIDO e nao pode mais ser alugado.
      */
     void vender();
 
@@ -43,17 +43,17 @@ public interface VeiculoI {
     int getano();
 
     /**
-     * Método que calcula um valor para venda.
-     * Utilizar o seguinte cálculo: valorParaVenda = valorDeCompra - idadeVeiculoEmAnos*0,15*valorDeCompra
-     * Se o resultado for menor do que 10% do valorDeCompra ou negativo, então varlorParaVenda = valorDeCompra*0,1
-     * @return O valor calculado para venda do veículo.
+     * Metodo que calcula um valor para venda.
+     * Utilizar o seguinte calculo: valorParaVenda = valorDeCompra - idadeVeiculoEmAnos*0,15*valorDeCompra
+     * Se o resultado for menor do que 10% do valorDeCompra ou negativo, entao varlorParaVenda = valorDeCompra*0,1
+     * @return O valor calculado para venda do veiculo.
      */
     double getValorParaVenda();
 
     /**
-     * Método que será abstrato na classe Veiculo.
-     * Retorna o valor da diária de locação específico para cada tipo de veículo.
-     * @return Valor da diária de locação.
+     * Metodo que sera abstrato na classe Veiculo.
+     * Retorna o valor da diaria de locacao especifico para cada tipo de veiculo.
+     * @return Valor da diaria de locacao.
      */
     double getValorDiariaLocacao();
 }

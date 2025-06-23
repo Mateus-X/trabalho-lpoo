@@ -14,14 +14,14 @@ public class Van extends Veiculo {
         this.modelo = modelo;
     }
 
-    // Método getModelo() específico para Van
+    // Metodo getModelo() especifico para Van
     public ModeloVan getModelo() {
         return modelo;
     }
 
     @Override
-    public double getValorDiariaLocacao() { // Implementa o método abstrato de Veiculo
-        // Implementação conforme tabela do enunciado (Requisito 2.e.iv)
+    public double getValorDiariaLocacao() { // Implementa o metodo abstrato de Veiculo
+        // Implementacao conforme tabela do enunciado (Requisito 2.e.iv)
         switch (this.getCategoria()) {
             case POPULAR:
                 return 200.00;
