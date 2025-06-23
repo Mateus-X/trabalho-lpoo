@@ -16,9 +16,16 @@ public class VeiculoController extends Controller {
     public void cadastrarVeiculo(Veiculo veiculo) {
         try {
             Veiculo veiculoValidado = VeiculoRequest.validar(veiculo);
+
+            if (repositorioMemoria.buscarVeiculoPorPlaca(veiculoValidado.getPlaca()) != null) {
+                throw new IllegalArgumentException("Veiculo com a placa " + veiculoValidado.getPlaca() + " ja cadastrado.");
+            }
+
             repositorioMemoria.adicionarVeiculo(veiculoValidado);
+
+            System.out.println("Veiculo cadastrado com sucesso");
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro ao cadastrar veículo: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 

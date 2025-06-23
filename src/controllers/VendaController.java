@@ -10,14 +10,12 @@ public class VendaController {
         this.repositorioMemoria = repositorioMemoria;
     }
 
-    public boolean venderVeiculo(String placa) {
+    public void venderVeiculo(String placa) {
         try {
             Veiculo veiculo = repositorioMemoria.buscarVeiculoPorPlaca(placa);
-            veiculo.vender(); // muda o estado do veículo para VENDIDO
-            return repositorioMemoria.removerVeiculo(placa); // remove da lista
+            veiculo.vender();
         } catch (IllegalArgumentException e) {
-            System.out.println("Erro ao vender veículo: " + e.getMessage());
-            return false;
+            System.out.println(e.getMessage());
         }
     }
 }

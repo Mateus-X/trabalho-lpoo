@@ -13,11 +13,11 @@ public class LocacaoRequest {
         }
 
         if (locacao.getData() == null) {
-            throw new IllegalArgumentException("Data não pode ser nula");
+            throw new IllegalArgumentException("Data nao pode ser nula");
         }
 
         if (locacao.getCliente() == null) {
-            throw new IllegalArgumentException("Cliente não pode ser nulo");
+            throw new IllegalArgumentException("Cliente nao pode ser nulo");
         }
     }
     
