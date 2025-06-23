@@ -1,9 +1,10 @@
 package views;
 
 import controllers.VeiculoController;
+import controllers.VendaController;
 import models.Veiculo;
 import models.enums.Marca;
-import views.tables.VeiculoTableModel;
+import views.tables.VenderVeiculoTableModel;
 import models.enums.Categoria;
 
 import javax.swing.*;
@@ -18,13 +19,16 @@ public class VenderVeiculoView extends JFrame {
     private JComboBox<Marca> cbMarca;
     private JComboBox<Categoria> cbCategoria;
     private JTable tblVeiculos;
-    private VeiculoTableModel tableModel;
+    private VenderVeiculoTableModel tableModel;
     private JButton btnVender;
     private VeiculoController veiculoController;
+    private VendaController vendaController;
 
-    public VenderVeiculoView(VeiculoController veiculoController) {
+    public VenderVeiculoView(VeiculoController veiculoController, VendaController vendaController) {
         super("Venda de Veiculos");
         this.veiculoController = veiculoController;
+        this.vendaController = vendaController;
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
         setLocationRelativeTo(null);
@@ -52,13 +56,8 @@ public class VenderVeiculoView extends JFrame {
                 int row = tblVeiculos.getSelectedRow();
                 if (row >= 0) {
                     String placa = (String) tblVeiculos.getValueAt(row, 0); 
-                    Veiculo v = veiculoController.buscarVeiculoPorPlaca(placa);
-                    if (v != null) {
-                        v.vender();
-                        veiculoController.removerVeiculo(placa);
-                        atualizarTabela();
-                        JOptionPane.showMessageDialog(null, "Veiculo vendido!");
-                    }
+                    vendaController.venderVeiculo(placa);
+                    atualizarTabela();
                 }
             }
         });
@@ -107,7 +106,7 @@ public class VenderVeiculoView extends JFrame {
     private JPanel createTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
 
-        tableModel = new VeiculoTableModel();
+        tableModel = new VenderVeiculoTableModel();
         tblVeiculos = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(tblVeiculos);
 
@@ -119,6 +118,6 @@ public class VenderVeiculoView extends JFrame {
     public JComboBox<Marca> getCbMarca() { return cbMarca; }
     public JComboBox<Categoria> getCbCategoria() { return cbCategoria; }
     public JTable getTblVeiculos() { return tblVeiculos; }
-    public VeiculoTableModel getTableModel() { return tableModel; }
+    public VenderVeiculoTableModel getTableModel() { return tableModel; }
     public JButton getBtnVender() { return btnVender; }
 }

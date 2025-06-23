@@ -5,9 +5,9 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VeiculoTableModel extends AbstractTableModel {
+public class VenderVeiculoTableModel extends AbstractTableModel {
     private List<Veiculo> veiculos = new ArrayList<>();
-    private final String[] colunas = {"Placa", "Marca", "Categoria", "Ano", "Estado", "Valor da diaria"};
+    private final String[] colunas = {"Placa", "Marca", "Categoria", "Ano", "Estado", "Valor de venda"};
 
     public void setVeiculos(List<Veiculo> veiculos) {
         this.veiculos = veiculos;
@@ -37,7 +37,7 @@ public class VeiculoTableModel extends AbstractTableModel {
             case 2: return v.getCategoria();
             case 3: return v.getano();
             case 4: return v.getEstado();
-            case 5: return v.getValorDiariaLocacao();
+            case 5: return v.getValorParaVenda();
             default: return null;
         }
     }

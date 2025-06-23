@@ -1,9 +1,9 @@
 package views;
 
-import controllers.LocacaoController;
+import controllers.DevolucaoController;
 import controllers.VeiculoController;
 import models.Veiculo;
-import views.tables.VeiculoTableModel;
+import views.tables.DevolverVeiculoTableModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,13 +14,15 @@ import java.util.List;
 
 public class DevolverVeiculoView extends JFrame {
     private JTable tblVeiculosLocados;
-    private VeiculoTableModel tableModel;
+    private DevolverVeiculoTableModel tableModel;
     private JButton btnDevolver;
     private VeiculoController veiculoController;
+    private DevolucaoController devolucaoController;
 
-    public DevolverVeiculoView(LocacaoController locacaoController, VeiculoController veiculoController) {
+    public DevolverVeiculoView(DevolucaoController devolucaoController, VeiculoController veiculoController) {
         super("Devolucao de Veiculos");
         this.veiculoController = veiculoController;
+        this.devolucaoController = devolucaoController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
         setLocationRelativeTo(null);
@@ -35,13 +37,9 @@ public class DevolverVeiculoView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int row = tblVeiculosLocados.getSelectedRow();
                 if (row >= 0) {
-                    String placa = (String) tblVeiculosLocados.getValueAt(row, 0); // Supondo que placa e a 1ª coluna
-                    Veiculo v = veiculoController.buscarVeiculoPorPlaca(placa);
-                    if (v != null) {
-                        v.devolver();
-                        atualizarTabela();
-                        JOptionPane.showMessageDialog(null, "Veiculo devolvido!");
-                    }
+                    String placa = (String) tblVeiculosLocados.getValueAt(row, 1); // Supondo que placa e a 1ª coluna
+                    devolucaoController.devolver(placa);
+                    atualizarTabela();
                 }
             }
         });
@@ -73,7 +71,7 @@ public class DevolverVeiculoView extends JFrame {
     private JPanel createTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
 
-        tableModel = new VeiculoTableModel();
+        tableModel = new DevolverVeiculoTableModel();
         tblVeiculosLocados = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(tblVeiculosLocados);
 
@@ -89,7 +87,15 @@ public class DevolverVeiculoView extends JFrame {
     }
 
     // Getters
-    public JTable getTblVeiculosLocados() { return tblVeiculosLocados; }
-    public VeiculoTableModel getTableModel() { return tableModel; }
-    public JButton getBtnDevolver() { return btnDevolver; }
+    public JTable getTblVeiculosLocados() {
+        return tblVeiculosLocados;
+    }
+
+    public DevolverVeiculoTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public JButton getBtnDevolver() {
+        return btnDevolver;
+    }
 }
