@@ -36,7 +36,7 @@ docs/
 │
 src/
 │
-├── br.com.locadora.model
+├── locadora.model
 │   ├── Cliente.java
 │   ├── Locacao.java
 │   ├── Veiculo.java (abstract)
@@ -51,13 +51,13 @@ src/
 │       ├── ModeloMotocicleta.java
 │       └── ModeloVan.java
 │
-├── br.com.locadora.interfaces
+├── locadora.interfaces
 │   └── VeiculoI.java
 │
-├── br.com.locadora.dao
+├── locadora.dao
 │   └── RepositorioMemoria.java  // lista de clientes e veículos em memória
 │
-├── br.com.locadora.view
+├── locadora.view
 │   ├── ClienteView.java
 │   ├── VeiculoView.java
 │   ├── LocacaoView.java
@@ -68,7 +68,7 @@ src/
 │       ├── VeiculoTableModel.java
 │       └── Utils.java
 │
-├── br.com.locadora.controller
+├── locadora.controller
 │   ├── ClienteController.java
 │   ├── VeiculoController.java
 │   ├── LocacaoController.java
