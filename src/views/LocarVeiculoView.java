@@ -66,7 +66,7 @@ public class LocarVeiculoView extends JFrame {
     private JPanel createFilterPanel() {
         JPanel filterPanel = new JPanel(new GridLayout(3, 4, 5, 5));
         
-        filterPanel.add(new JLabel("Buscar Cliente:"));
+        filterPanel.add(new JLabel("Buscar Cliente por CPF:"));
         txtBuscaCliente = new JTextField();
         filterPanel.add(txtBuscaCliente);
         

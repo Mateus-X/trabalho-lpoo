@@ -4,6 +4,8 @@ import models.Cliente;
 
 public class ClienteRequest {
     public static void validar(Cliente cliente) throws IllegalArgumentException {
+        validarCpf(cliente.getCPF());
+
         if (cliente.getNome() == null || cliente.getNome().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome nao pode ser vazio");
         }

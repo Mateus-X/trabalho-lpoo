@@ -72,7 +72,7 @@ public class AdicionarVeiculoView extends JFrame {
         formPanel.add(new JLabel("Estado:"));
         cbEstado = new JComboBox<>(Estado.values());
         formPanel.add(cbEstado);
-
+        
         formPanel.add(new JLabel("Categoria:"));
         cbCategoria = new JComboBox<>(Categoria.values());
         formPanel.add(cbCategoria);
@@ -82,7 +82,7 @@ public class AdicionarVeiculoView extends JFrame {
         formPanel.add(cbModelo);
 
         formPanel.add(new JLabel("Valor de Compra:"));
-        txtValorCompra = new JFormattedTextField(NumberFormat.getCurrencyInstance());
+        txtValorCompra = new JFormattedTextField(NumberFormat.getNumberInstance());
         formPanel.add(txtValorCompra);
 
         formPanel.add(new JLabel("Placa:"));
@@ -118,7 +118,7 @@ public class AdicionarVeiculoView extends JFrame {
                 Categoria categoria = (Categoria) cbCategoria.getSelectedItem();
                 double valorCompra = 0.0;
                 try {
-                    valorCompra = NumberFormat.getCurrencyInstance().parse(txtValorCompra.getText()).doubleValue();
+                    valorCompra = NumberFormat.getNumberInstance().parse(txtValorCompra.getText()).doubleValue();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Valor de compra invalido.");
                     return;

@@ -89,10 +89,10 @@ public class MainFrame extends JFrame {
             DevolverVeiculoView devolverVeiculoView = new DevolverVeiculoView(locacaoController, veiculoController);
             devolverVeiculoView.setVisible(true);
         });
-        // btnVenderVeiculo.addActionListener(e -> {
-        //     VenderVeiculoView venderVeiculoView = new VenderVeiculoView(veiculoController);
-        //     venderVeiculoView.setVisible(true);
-        // });
+        btnVenderVeiculo.addActionListener(e -> {
+            VenderVeiculoView venderVeiculoView = new VenderVeiculoView(veiculoController);
+            venderVeiculoView.setVisible(true);
+        });
     }
     
     // Getters para os botoes

@@ -50,7 +50,7 @@ public class RepositorioMemoria {
                 return cliente;
             }
         }
-        throw new IllegalArgumentException("Cliente nao encontrado");
+        return null;
     }
 
     public void atualizarCliente(Cliente clienteAtualizado) {
@@ -64,7 +64,6 @@ public class RepositorioMemoria {
             }
         }
 
-        throw new IllegalArgumentException("Cliente nao encontrado");
     }
 
     public boolean excluirCliente(String cpf) {
@@ -74,11 +73,12 @@ public class RepositorioMemoria {
             throw new IllegalArgumentException("Cliente nao encontrado");
         }
 
-        // Requisito 1.c: Deve ser possivel excluir um cliente que nao possua veiculos locados. 
+        // Requisito 1.c: Deve ser possivel excluir um cliente que nao possua veiculos
+        // locados.
         for (Veiculo veiculo : veiculos) {
             Locacao locacao = veiculo.getLocacao();
             if (locacao != null && locacao.getCliente() != null && locacao.getCliente().getCPF().equals(cpf)) {
-                throw new IllegalArgumentException("Cliente possui veiculos locados."); 
+                throw new IllegalArgumentException("Cliente possui veiculos locados.");
             }
         }
 
@@ -97,6 +97,8 @@ public class RepositorioMemoria {
     public void adicionarVeiculo(Veiculo veiculo) {
         if (veiculo != null && buscarVeiculoPorPlaca(veiculo.getPlaca()) == null) {
             this.veiculos.add(veiculo);
+        } else {
+            throw new IllegalArgumentException("Veiculo ja cadastrado ou invalido.");
         }
     }
 
@@ -114,8 +116,8 @@ public class RepositorioMemoria {
                 return veiculo;
             }
         }
-        
-        throw new IllegalArgumentException("Veiculo nao encontrado");
+
+        return null;
     }
 
     public List<Veiculo> listarVeiculosDisponiveis() {
@@ -137,11 +139,11 @@ public class RepositorioMemoria {
     }
 
     /**
-     * Filtra veiculos por tipo, marca e/ou categoria. 
+     * Filtra veiculos por tipo, marca e/ou categoria.
      * Os parametros podem ser nulos para indicar que nao sao criterios de filtro.
      *
-     * @param tipo String ("Automovel", "Motocicleta", "Van") ou null
-     * @param marca Enum Marca ou null
+     * @param tipo      String ("Automovel", "Motocicleta", "Van") ou null
+     * @param marca     Enum Marca ou null
      * @param categoria Enum Categoria ou null
      * @return Lista de veiculos filtrados.
      */
@@ -171,6 +173,7 @@ public class RepositorioMemoria {
 
     /**
      * Remove um veiculo da memoria (usado apos a venda, por exemplo).
+     * 
      * @param placa A placa do veiculo a ser removido.
      * @return true se o veiculo foi removido, false caso contrario.
      */
@@ -182,7 +185,7 @@ public class RepositorioMemoria {
         } else if (veiculoParaRemover != null) {
             throw new IllegalArgumentException("Veiculo nao pode ser removido, pois nao esta vendido.");
         }
-        
+
         throw new IllegalArgumentException("Veiculo nao encontrado.");
     }
 }

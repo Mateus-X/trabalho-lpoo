@@ -107,6 +107,7 @@ public class ClienteView extends JFrame {
                     txtCPF.getText(),
                     txtEndereco.getText()
                 );
+
                 atualizarTabela();
             }
         });
@@ -131,7 +132,7 @@ public class ClienteView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int row = tblClientes.getSelectedRow();
                 if (row >= 0) {
-                    String cpf = (String) tblClientes.getValueAt(row, 3); // Supondo que CPF e a 4ª coluna
+                    String cpf = (String) tblClientes.getValueAt(row, 3);
                     clienteController.excluirCliente(cpf);
                     atualizarTabela();
                 }
