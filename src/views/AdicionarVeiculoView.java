@@ -62,7 +62,7 @@ public class AdicionarVeiculoView extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(8, 2, 5, 5));
 
         formPanel.add(new JLabel("Tipo de Veiculo:"));
-        cbTipoVeiculo = new JComboBox<>(new String[]{"Automovel", "Motocicleta", "Van"});
+        cbTipoVeiculo = new JComboBox<>(new String[] { "Automovel", "Motocicleta", "Van" });
         formPanel.add(cbTipoVeiculo);
 
         formPanel.add(new JLabel("Marca:"));
@@ -72,7 +72,7 @@ public class AdicionarVeiculoView extends JFrame {
         formPanel.add(new JLabel("Estado:"));
         cbEstado = new JComboBox<>(Estado.values());
         formPanel.add(cbEstado);
-        
+
         formPanel.add(new JLabel("Categoria:"));
         cbCategoria = new JComboBox<>(Categoria.values());
         formPanel.add(cbCategoria);
@@ -127,15 +127,17 @@ public class AdicionarVeiculoView extends JFrame {
                 int ano = (int) spAno.getValue();
                 Object modelo = cbModelo.getSelectedItem();
                 if (tipo.equals("Automovel") && modelo instanceof ModeloAutomovel) {
-                    veiculoController.cadastrarVeiculo(new Automovel(marca, categoria, valorCompra, placa, ano, (ModeloAutomovel) modelo));
+                    veiculoController.cadastrarVeiculo(
+                            new Automovel(marca, categoria, valorCompra, placa, ano, (ModeloAutomovel) modelo));
                 } else if (tipo.equals("Motocicleta") && modelo instanceof ModeloMotocicleta) {
-                    veiculoController.cadastrarVeiculo(new Motocicleta(marca, categoria, valorCompra, placa, ano, (ModeloMotocicleta) modelo));
+                    veiculoController.cadastrarVeiculo(
+                            new Motocicleta(marca, categoria, valorCompra, placa, ano, (ModeloMotocicleta) modelo));
                 } else if (tipo.equals("Van") && modelo instanceof ModeloVan) {
-                    veiculoController.cadastrarVeiculo(new Van(marca, categoria, valorCompra, placa, ano, (ModeloVan) modelo));
+                    veiculoController
+                            .cadastrarVeiculo(new Van(marca, categoria, valorCompra, placa, ano, (ModeloVan) modelo));
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecione um modelo valido.");
                 }
-                JOptionPane.showMessageDialog(null, "Veiculo cadastrado!");
             }
         });
         atualizarModelos();
@@ -145,23 +147,52 @@ public class AdicionarVeiculoView extends JFrame {
         String tipo = (String) cbTipoVeiculo.getSelectedItem();
         DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>();
         if (tipo.equals("Automovel")) {
-            for (ModeloAutomovel m : ModeloAutomovel.values()) model.addElement(m);
+            for (ModeloAutomovel m : ModeloAutomovel.values())
+                model.addElement(m);
         } else if (tipo.equals("Motocicleta")) {
-            for (ModeloMotocicleta m : ModeloMotocicleta.values()) model.addElement(m);
+            for (ModeloMotocicleta m : ModeloMotocicleta.values())
+                model.addElement(m);
         } else if (tipo.equals("Van")) {
-            for (ModeloVan m : ModeloVan.values()) model.addElement(m);
+            for (ModeloVan m : ModeloVan.values())
+                model.addElement(m);
         }
         cbModelo.setModel(model);
     }
 
     // Getters
-    public JComboBox<String> getCbTipoVeiculo() { return cbTipoVeiculo; }
-    public JComboBox<Marca> getCbMarca() { return cbMarca; }
-    public JComboBox<Estado> getCbEstado() { return cbEstado; }
-    public JComboBox<Categoria> getCbCategoria() { return cbCategoria; }
-    public JComboBox<Object> getCbModelo() { return cbModelo; }
-    public JFormattedTextField getTxtValorCompra() { return txtValorCompra; }
-    public JFormattedTextField getTxtPlaca() { return txtPlaca; }
-    public JSpinner getSpAno() { return spAno; }
-    public JButton getBtnAdicionar() { return btnAdicionar; }
+    public JComboBox<String> getCbTipoVeiculo() {
+        return cbTipoVeiculo;
+    }
+
+    public JComboBox<Marca> getCbMarca() {
+        return cbMarca;
+    }
+
+    public JComboBox<Estado> getCbEstado() {
+        return cbEstado;
+    }
+
+    public JComboBox<Categoria> getCbCategoria() {
+        return cbCategoria;
+    }
+
+    public JComboBox<Object> getCbModelo() {
+        return cbModelo;
+    }
+
+    public JFormattedTextField getTxtValorCompra() {
+        return txtValorCompra;
+    }
+
+    public JFormattedTextField getTxtPlaca() {
+        return txtPlaca;
+    }
+
+    public JSpinner getSpAno() {
+        return spAno;
+    }
+
+    public JButton getBtnAdicionar() {
+        return btnAdicionar;
+    }
 }

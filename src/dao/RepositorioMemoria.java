@@ -61,33 +61,33 @@ public class RepositorioMemoria {
         for (int i = 0; i < clientes.size(); i++) {
             if (clientes.get(i).getCPF().equals(clienteAtualizado.getCPF())) {
                 clientes.set(i, clienteAtualizado);
+                return;
             }
         }
 
+        throw new IllegalArgumentException("Cliente nao encontrado");
     }
 
     public boolean excluirCliente(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
             throw new IllegalArgumentException("CPF invalido");
-        } else if (buscarClientePorCpf(cpf) == null) {
+        }
+        
+        Cliente cliente = buscarClientePorCpf(cpf);
+        if (cliente == null) {
             throw new IllegalArgumentException("Cliente nao encontrado");
         }
 
-        // Requisito 1.c: Deve ser possivel excluir um cliente que nao possua veiculos
-        // locados.
+        // Verifica se o cliente possui veiculos locados antes de excluir
         for (Veiculo veiculo : veiculos) {
             Locacao locacao = veiculo.getLocacao();
-            if (locacao != null && locacao.getCliente() != null && locacao.getCliente().getCPF().equals(cpf)) {
+            if (locacao != null && locacao.getCliente().getCPF().equals(cpf)) {
                 throw new IllegalArgumentException("Cliente possui veiculos locados.");
             }
         }
 
-        Cliente clienteParaRemover = buscarClientePorCpf(cpf);
-        if (clienteParaRemover != null) {
-            clientes.remove(clienteParaRemover);
-            return true;
-        }
-        throw new IllegalArgumentException("CPF invalido");
+        clientes.remove(cliente);
+        return true;
     }
 
     /*
@@ -97,8 +97,6 @@ public class RepositorioMemoria {
     public void adicionarVeiculo(Veiculo veiculo) {
         if (veiculo != null && buscarVeiculoPorPlaca(veiculo.getPlaca()) == null) {
             this.veiculos.add(veiculo);
-        } else {
-            throw new IllegalArgumentException("Veiculo ja cadastrado ou invalido.");
         }
     }
 
@@ -138,14 +136,9 @@ public class RepositorioMemoria {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Filtra veiculos por tipo, marca e/ou categoria.
-     * Os parametros podem ser nulos para indicar que nao sao criterios de filtro.
-     *
-     * @param tipo      String ("Automovel", "Motocicleta", "Van") ou null
-     * @param marca     Enum Marca ou null
-     * @param categoria Enum Categoria ou null
-     * @return Lista de veiculos filtrados.
+    /*
+     * Filtra veiculos por tipo, marca e categoria.
+     * Caso qualquer um dos filtros seja nulo, ele e ignorado.
      */
     public List<Veiculo> filtrarVeiculos(String tipo, Marca marca, Categoria categoria) {
         return veiculos.stream()
@@ -159,7 +152,7 @@ public class RepositorioMemoria {
                         } else if (tipo.equalsIgnoreCase("Van")) {
                             tipoMatch = veiculo instanceof Van;
                         } else {
-                            tipoMatch = false; // Tipo invalido
+                            tipoMatch = false;
                         }
                     }
 
@@ -171,11 +164,9 @@ public class RepositorioMemoria {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Remove um veiculo da memoria (usado apos a venda, por exemplo).
-     * 
-     * @param placa A placa do veiculo a ser removido.
-     * @return true se o veiculo foi removido, false caso contrario.
+    /*
+     * Remove um veiculo da lista se ele estiver com estado VENDIDO.
+     * Caso contrario, lanca excecao apropriada.
      */
     public boolean removerVeiculo(String placa) {
         Veiculo veiculoParaRemover = buscarVeiculoPorPlaca(placa);

@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Calendar;
+import java.util.List;
 
 import dao.RepositorioMemoria;
 import models.Cliente;
@@ -22,6 +23,14 @@ public class LocacaoController extends Controller {
 
             ClienteRequest.validarCpf(cpf);
             Cliente cliente = this.repositorioMemoria.buscarClientePorCpf(cpf);
+
+            List<Veiculo> veiculosLocados = this.repositorioMemoria.listarVeiculosLocados();
+            
+            for (Veiculo v : veiculosLocados) {
+                if (v.getLocacao().getCliente().getCPF() == cliente.getCPF()) {
+                    throw new IllegalArgumentException("Cliente ja tem veiculos locados.");
+                }
+            }
 
             veiculo.locar(dias, data, cliente);
 
