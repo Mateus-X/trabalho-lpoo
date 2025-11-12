@@ -2,6 +2,15 @@
 
 Projeto desenvolvido para a disciplina de **LPOO I** (Linguagem de Programação Orientada a Objetos I), com o objetivo de implementar um sistema de gerenciamento de uma locadora de veículos, utilizando **Java** com **Swing** e aplicando os conceitos de **herança**, **polimorfismo** e **encapsulamento**.
 
+# Banco de dacdos
+
+Baixa esse aq 
+https://github.com/xerial/sqlite-jdbc/releases
+
+buta no lib/
+
+deixe o script fazer o rescto
+
 ## 🧩 Funcionalidades
 
 - **Cadastro de Clientes**
