@@ -83,6 +83,20 @@ public abstract class Veiculo implements VeiculoI {
         return locacao;
     }
 
+    // novo getter para suportar persistencia
+    public double getValorDeCompra() {
+        return valorDeCompra;
+    }
+
+    // setters para que DAOs possam reconstruir o estado sem reflection
+    public void setLocacao(Locacao locacao) {
+        this.locacao = locacao;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
     @Override
     public String getPlaca() {
         return placa;

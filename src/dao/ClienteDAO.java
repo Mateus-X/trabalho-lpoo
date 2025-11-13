@@ -1,92 +1,65 @@
 package dao;
 
+import dao.conf.ConexaoDao;
+import interfaces.IClienteDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import interfaces.IClienteDAO;
 import models.Cliente;
 
 public class ClienteDAO implements IClienteDAO {
 
-    private Connection conexao;
-
-    // Recebe a conexão no construtor
-    public ClienteDAO(Connection conexao) {
-        this.conexao = conexao;
-    }
-
     @Override
-    public void adicionarCliente(Cliente cliente) throws SQLException, IllegalArgumentException {
-        if (buscarClientePorCpf(cliente.getCPF()) != null) {
-            throw new IllegalArgumentException("Cliente ja cadastrado.");
-        }
-        
-        String sql = "INSERT INTO cliente (cpf, nome, sobrenome, rg, endereco) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setString(1, cliente.getCPF());
-            stmt.setString(2, cliente.getNome());
-            stmt.setString(3, cliente.getSobrenome());
-            stmt.setString(4, cliente.getRG());
-            stmt.setString(5, cliente.getEndereco());
-            stmt.executeUpdate();
-        }
-    }
-
-    @Override
-    public void atualizarCliente(Cliente cliente) throws SQLException, IllegalArgumentException {
-        String sql = "UPDATE cliente SET nome = ?, sobrenome = ?, rg = ?, endereco = ? WHERE cpf = ?";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setString(1, cliente.getNome());
-            stmt.setString(2, cliente.getSobrenome());
-            stmt.setString(3, cliente.getRG());
-            stmt.setString(4, cliente.getEndereco());
-            stmt.setString(5, cliente.getCPF());
+    public void salvar(Cliente cliente) throws Exception {
+        String sql = "INSERT INTO clientes (cpf, nome, sobrenome, rg, endereco) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = ConexaoDao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                 throw new IllegalArgumentException("Cliente nao encontrado");
-            }
+            ps.setString(1, cliente.getCPF());
+            ps.setString(2, cliente.getNome());
+            ps.setString(3, cliente.getSobrenome());
+            ps.setString(4, cliente.getRG());
+            ps.setString(5, cliente.getEndereco());
+            ps.executeUpdate();
         }
     }
 
     @Override
-    public void excluirCliente(String cpf) throws SQLException, IllegalArgumentException {
-        // [cite: 13, 14] Verifica se o cliente possui veículos locados
-        String checkSql = "SELECT COUNT(v.placa) "
-                        + "FROM veiculo v "
-                        + "JOIN locacao l ON v.locacao_id = l.id "
-                        + "WHERE l.cliente_cpf = ? AND v.estado = 'LOCADO'"; // Verifica se ESTÁ LOCADO
-        
-        try (PreparedStatement checkStmt = conexao.prepareStatement(checkSql)) {
-            checkStmt.setString(1, cpf);
-            try (ResultSet rs = checkStmt.executeQuery()) {
-                if (rs.next() && rs.getInt(1) > 0) {
-                    throw new IllegalArgumentException("Cliente possui veiculos locados.");
-                }
-            }
-        }
-        
-        // Se não tiver, exclui
-        String deleteSql = "DELETE FROM cliente WHERE cpf = ?";
-        try (PreparedStatement deleteStmt = conexao.prepareStatement(deleteSql)) {
-            deleteStmt.setString(1, cpf);
-            int affectedRows = deleteStmt.executeUpdate();
-            if (affectedRows == 0) {
-                 throw new IllegalArgumentException("Cliente nao encontrado");
-            }
+    public void atualizar(Cliente cliente) throws Exception {
+        String sql = "UPDATE clientes SET nome = ?, sobrenome = ?, rg = ?, endereco = ? WHERE cpf = ?";
+        try (Connection conn = ConexaoDao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, cliente.getNome());
+            ps.setString(2, cliente.getSobrenome());
+            ps.setString(3, cliente.getRG());
+            ps.setString(4, cliente.getEndereco());
+            ps.setString(5, cliente.getCPF());
+            ps.executeUpdate();
         }
     }
 
     @Override
-    public Cliente buscarClientePorCpf(String cpf) throws SQLException {
-        String sql = "SELECT * FROM cliente WHERE cpf = ?";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setString(1, cpf);
-            try (ResultSet rs = stmt.executeQuery()) {
+    public void excluir(String cpf) throws Exception {
+        String sql = "DELETE FROM clientes WHERE cpf = ?";
+        try (Connection conn = ConexaoDao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, cpf);
+            ps.executeUpdate();
+        }
+    }
+
+    @Override
+    public Cliente buscarPorCpf(String cpf) throws Exception {
+        String sql = "SELECT * FROM clientes WHERE cpf = ?";
+        try (Connection conn = ConexaoDao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, cpf);
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new Cliente(
                         rs.getString("nome"),
@@ -98,14 +71,17 @@ public class ClienteDAO implements IClienteDAO {
                 }
             }
         }
-        return null; // Não encontrado
+        return null;
     }
 
     @Override
-    public List<Cliente> listarTodosClientes() throws SQLException {
+    public List<Cliente> listarTodos() throws Exception {
         List<Cliente> clientes = new ArrayList<>();
-        String sql = "SELECT * FROM cliente";
-        try (PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+        String sql = "SELECT * FROM clientes";
+        try (Connection conn = ConexaoDao.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
             while (rs.next()) {
                 clientes.add(new Cliente(
                     rs.getString("nome"),

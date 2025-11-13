@@ -28,7 +28,6 @@ public class RepositorioMemoria {
     /*
      * Metodos para Gerenciamento de Clientes
      */
-
     public void adicionarCliente(Cliente cliente) throws IllegalArgumentException {
         if (cliente != null && buscarClientePorCpf(cliente.getCPF()) == null) {
             this.clientes.add(cliente);
