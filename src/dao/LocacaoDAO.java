@@ -65,25 +65,27 @@ public class LocacaoDAO implements ILocacaoDAO {
     private Locacao buscar(String sql, String parametro) throws Exception {
         try (Connection conn = ConexaoDao.getConexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            
             ps.setString(1, parametro);
-            ps.setBoolean(2, false); // Apenas ativas
+            ps.setBoolean(2, false); 
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String clienteCpf = rs.getString("cliente_cpf");
-                    Cliente cliente = clienteDAO.buscarPorCpf(clienteCpf); // Usa o ClienteDAO
-                    
+                    int dias = rs.getInt("dias");
+                    double valor = rs.getDouble("valor");
+                    java.sql.Date dataLocacaoSql = rs.getDate("data_locacao");
+                    Calendar data = Calendar.getInstance();
+                    data.setTime(dataLocacaoSql);
+
+                    Cliente cliente = clienteDAO.buscarPorCpf(clienteCpf);
+
                     if (cliente == null) {
                         throw new Exception("Cliente da locação não encontrado: " + clienteCpf);
                     }
-                    
-                    Calendar data = Calendar.getInstance();
-                    data.setTime(rs.getDate("data_locacao"));
-                    
+
                     return new Locacao(
-                        rs.getInt("dias"),
-                        rs.getDouble("valor"),
+                        dias,
+                        valor,
                         data,
                         cliente
                     );

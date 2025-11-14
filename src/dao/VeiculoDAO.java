@@ -24,17 +24,18 @@ public class VeiculoDAO implements IVeiculoDAO {
      * Tabela 'veiculos' com colunas:
      * placa (PK), marca, categoria, valor_compra, ano, estado,
      * tipo_veiculo (CHAR: 'A', 'M', 'V'),
-     * modelo_automovel (NULLABLE), modelo_motocicleta (NULLABLE), modelo_van (NULLABLE)
+     * modelo_automovel (NULLABLE), modelo_motocicleta (NULLABLE), modelo_van
+     * (NULLABLE)
      */
     @Override
     public void salvar(Veiculo veiculo) throws Exception {
         String sql = "INSERT INTO veiculos (placa, marca, categoria, valor_compra, ano, estado, " +
-                     "tipo_veiculo, modelo_automovel, modelo_motocicleta, modelo_van) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+                "tipo_veiculo, modelo_automovel, modelo_motocicleta, modelo_van) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = ConexaoDao.getConexao();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, veiculo.getPlaca());
             ps.setString(2, veiculo.getMarca().name());
             ps.setString(3, veiculo.getCategoria().name());
@@ -70,16 +71,16 @@ public class VeiculoDAO implements IVeiculoDAO {
     public void atualizar(Veiculo veiculo) throws Exception {
         String sql = "UPDATE veiculos SET estado = ? WHERE placa = ?";
         try (Connection conn = ConexaoDao.getConexao();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, veiculo.getEstado().name());
             ps.setString(2, veiculo.getPlaca());
             ps.executeUpdate();
-            
+
             // Se o veículo foi locado, salva a locação
             if (veiculo.getEstado() == Estado.LOCADO && veiculo.getLocacao() != null) {
                 // Remove locações ativas antigas (segurança) e salva a nova
-                locacaoDAO.concluir(veiculo.getPlaca()); 
+                locacaoDAO.concluir(veiculo.getPlaca());
                 locacaoDAO.salvar(veiculo.getLocacao(), veiculo.getPlaca());
             }
             // Se foi devolvido ou vendido, conclui a locação
@@ -93,8 +94,8 @@ public class VeiculoDAO implements IVeiculoDAO {
     public Veiculo buscarPorPlaca(String placa) throws Exception {
         String sql = "SELECT * FROM veiculos WHERE placa = ?";
         try (Connection conn = ConexaoDao.getConexao();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, placa);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -108,30 +109,49 @@ public class VeiculoDAO implements IVeiculoDAO {
     @Override
     public List<Veiculo> listarPorEstado(Estado estado) throws Exception {
         List<Veiculo> veiculos = new ArrayList<>();
+        List<String> placasLocados = new ArrayList<>();
         String sql = "SELECT * FROM veiculos WHERE estado = ?";
         try (Connection conn = ConexaoDao.getConexao();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, estado.name());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    veiculos.add(instanciarVeiculo(rs));
+                    Veiculo veiculo = instanciarVeiculoSemLocacao(rs);
+                    veiculos.add(veiculo);
+                    if (veiculo.getEstado() == Estado.LOCADO) {
+                        placasLocados.add(veiculo.getPlaca());
+                    }
                 }
             }
         }
+
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo.getEstado() == Estado.LOCADO) {
+                Locacao loc = locacaoDAO.buscarLocacaoAtivaPorVeiculo(veiculo.getPlaca());
+                veiculo.setLocacao(loc);
+            }
+        }
+
         return veiculos;
     }
-    
+
     @Override
     public List<Veiculo> listarTodos() throws Exception {
         List<Veiculo> veiculos = new ArrayList<>();
         String sql = "SELECT * FROM veiculos";
         try (Connection conn = ConexaoDao.getConexao();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                veiculos.add(instanciarVeiculo(rs));
+                Veiculo veiculo = instanciarVeiculoSemLocacao(rs);
+                veiculos.add(veiculo);
+            }
+        }
+
+        for (Veiculo veiculo : veiculos) {
+            if (veiculo.getEstado() == Estado.LOCADO) {
+                Locacao loc = locacaoDAO.buscarLocacaoAtivaPorVeiculo(veiculo.getPlaca());
+                veiculo.setLocacao(loc);
             }
         }
         return veiculos;
@@ -167,7 +187,6 @@ public class VeiculoDAO implements IVeiculoDAO {
         return resultado;
     }
 
-
     private Veiculo instanciarVeiculo(ResultSet rs) throws Exception {
         Marca marca = Marca.valueOf(rs.getString("marca"));
         Categoria cat = Categoria.valueOf(rs.getString("categoria"));
@@ -181,22 +200,44 @@ public class VeiculoDAO implements IVeiculoDAO {
 
         if ("A".equals(tipo)) {
             ModeloAutomovel modelo = ModeloAutomovel.valueOf(rs.getString("modelo_automovel"));
-            veiculo = new Automovel(marca, cat, valor, placa, ano, modelo);
+            veiculo = new Automovel(marca, cat, valor, placa, ano, modelo, estado);
         } else if ("M".equals(tipo)) {
             ModeloMotocicleta modelo = ModeloMotocicleta.valueOf(rs.getString("modelo_motocicleta"));
-            veiculo = new Motocicleta(marca, cat, valor, placa, ano, modelo);
+            veiculo = new Motocicleta(marca, cat, valor, placa, ano, modelo, estado);
         } else if ("V".equals(tipo)) {
             ModeloVan modelo = ModeloVan.valueOf(rs.getString("modelo_van"));
-            veiculo = new Van(marca, cat, valor, placa, ano, modelo);
+            veiculo = new Van(marca, cat, valor, placa, ano, modelo, estado);
+        } else {
+            throw new Exception("Tipo de veículo desconhecido no banco: " + tipo);
+        }
+        return veiculo;
+
+    }
+
+    private Veiculo instanciarVeiculoSemLocacao(ResultSet rs) throws Exception {
+        Marca marca = Marca.valueOf(rs.getString("marca"));
+        Categoria cat = Categoria.valueOf(rs.getString("categoria"));
+        double valor = rs.getDouble("valor_compra");
+        String placa = rs.getString("placa");
+        int ano = rs.getInt("ano");
+        Estado estado = Estado.valueOf(rs.getString("estado"));
+        String tipo = rs.getString("tipo_veiculo");
+
+        Veiculo veiculo = null;
+
+        if ("A".equals(tipo)) {
+            ModeloAutomovel modelo = ModeloAutomovel.valueOf(rs.getString("modelo_automovel"));
+            veiculo = new Automovel(marca, cat, valor, placa, ano, modelo, estado);
+        } else if ("M".equals(tipo)) {
+            ModeloMotocicleta modelo = ModeloMotocicleta.valueOf(rs.getString("modelo_motocicleta"));
+            veiculo = new Motocicleta(marca, cat, valor, placa, ano, modelo, estado);
+        } else if ("V".equals(tipo)) {
+            ModeloVan modelo = ModeloVan.valueOf(rs.getString("modelo_van"));
+            veiculo = new Van(marca, cat, valor, placa, ano, modelo, estado);
         } else {
             throw new Exception("Tipo de veículo desconhecido no banco: " + tipo);
         }
 
-        if (estado == Estado.LOCADO) {
-            Locacao loc = locacaoDAO.buscarLocacaoAtivaPorVeiculo(placa);
-            veiculo.setLocacao(loc); 
-        }
-        
         return veiculo;
     }
 }

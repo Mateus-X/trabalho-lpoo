@@ -2,16 +2,19 @@ package controllers;
 
 import java.util.List;
 
-import dao.RepositorioMemoria;
+import interfaces.IClienteDAO;
 import models.Cliente;
 import requests.ClienteRequest;
 
 public class ClienteController extends Controller {
 
-    public ClienteController(RepositorioMemoria repositorioMemoria) {
-        super(repositorioMemoria);
+    private IClienteDAO clienteDAO;
+
+    public ClienteController(IClienteDAO clienteDAO) {
+        super(clienteDAO, null, null);
+        this.clienteDAO = clienteDAO;
     }
-    
+
     // Cadastrar Cliente com validacao
     public void cadastrarCliente(String nome, String sobrenome, String RG, String CPF, String endereco) {
         try {
@@ -19,16 +22,23 @@ public class ClienteController extends Controller {
 
             ClienteRequest.validar(cliente);
 
-            this.repositorioMemoria.adicionarCliente(cliente);
-        } catch (IllegalArgumentException e) {
+            Cliente existente = clienteDAO.buscarPorCpf(CPF);
+            if (existente != null) {
+                System.out.println("Cliente com este CPF ja existe.");
+                return;
+            }
+
+            clienteDAO.salvar(cliente);
+            System.out.println("Cliente cadastrado com sucesso.");
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     public Cliente buscarCliente(String CPF) {
         try {
-            return this.repositorioMemoria.buscarClientePorCpf(CPF);
-        } catch (IllegalArgumentException e) {
+            return clienteDAO.buscarPorCpf(CPF);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -39,28 +49,29 @@ public class ClienteController extends Controller {
             Cliente cliente = new Cliente(nome, sobrenome, RG, CPF, endereco);
 
             ClienteRequest.validar(cliente);
-            this.repositorioMemoria.atualizarCliente(cliente);
+            clienteDAO.atualizar(cliente);
 
-        } catch (IllegalArgumentException e) {
+            System.out.println("Cliente atualizado com sucesso.");
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     public void excluirCliente(String CPF) {
         try {
-            boolean result = this.repositorioMemoria.excluirCliente(CPF);
-
-            if (result) {
-                System.out.println("Cliente excluido com sucesso.");
-            } else {
-                System.out.println("Erro interno do servidor.");
-            }
-        } catch (IllegalArgumentException e) {
+            clienteDAO.excluir(CPF);
+            System.out.println("Cliente excluido com sucesso.");
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     public List<Cliente> listarTodosClientes() {
-        return this.repositorioMemoria.listarTodosClientes();
+        try {
+            return clienteDAO.listarTodos();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return java.util.Collections.emptyList();
+        }
     }
 }

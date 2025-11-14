@@ -17,13 +17,16 @@ public abstract class Veiculo implements VeiculoI {
     protected String placa;
     protected int ano;
 
-    public Veiculo(Marca marca, Categoria categoria, double valorDeCompra, String placa, int ano) {
+    public Veiculo(Marca marca, Categoria categoria, double valorDeCompra, String placa, int ano, Estado estado) {
         this.marca = marca;
         this.categoria = categoria;
         this.valorDeCompra = valorDeCompra;
         this.placa = placa;
         this.ano = ano;
-        this.estado = Estado.DISPONIVEL; // Ou Estado.NOVO, dependendo do estado inicial quando comprado.
+        this.estado = Estado.DISPONIVEL;
+        if (estado != null) {
+            this.estado = estado;
+        }
         this.locacao = null;
     }
 
@@ -31,7 +34,8 @@ public abstract class Veiculo implements VeiculoI {
     public void locar(int dias, Calendar data, Cliente cliente) {
         try {
             if (this.estado != Estado.DISPONIVEL) {
-                throw new IllegalStateException("Veiculo esta atualmente " + this.estado.toString().toLowerCase() + ".");
+                throw new IllegalStateException(
+                        "Veiculo esta atualmente " + this.estado.toString().toLowerCase() + ".");
             }
 
             double valorLocacao = dias * this.getValorDiariaLocacao();
@@ -61,6 +65,19 @@ public abstract class Veiculo implements VeiculoI {
         } else {
             System.out.println("Nao foi possivel devolver o veiculo. Estado atual: " + this.estado);
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Veiculo{marca=%s, categoria=%s, estado=%s, placa=%s, ano=%d, valorDeCompra=%.2f, locacao=%s}",
+                marca == null ? "null" : marca,
+                categoria == null ? "null" : categoria,
+                estado == null ? "null" : estado,
+                placa == null ? "null" : placa,
+                ano,
+                valorDeCompra,
+                locacao == null ? "null" : locacao.toString());
     }
 
     @Override
@@ -124,4 +141,5 @@ public abstract class Veiculo implements VeiculoI {
 
     @Override
     public abstract double getValorDiariaLocacao();
+
 }

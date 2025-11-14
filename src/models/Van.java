@@ -1,6 +1,7 @@
 package models;
 
 import models.enums.Categoria;
+import models.enums.Estado;
 import models.enums.Marca;
 import models.enums.ModeloVan;
 
@@ -9,8 +10,8 @@ public class Van extends Veiculo {
     private ModeloVan modelo;
 
     // Construtor
-    public Van(Marca marca, Categoria categoria, double valorDeCompra, String placa, int ano, ModeloVan modelo) {
-        super(marca, categoria, valorDeCompra, placa, ano);
+    public Van(Marca marca, Categoria categoria, double valorDeCompra, String placa, int ano, ModeloVan modelo, Estado estado) {
+        super(marca, categoria, valorDeCompra, placa, ano, estado);
         this.modelo = modelo;
     }
 

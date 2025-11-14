@@ -10,7 +10,7 @@ set "LIB_DIR=lib"
 set "MAIN_CLASS=Main"
 
 rem Nome do JAR do driver JDBC
-set "JDBC_JAR=sqlite-jdbc-3.46.0.0.jar"
+set "JDBC_JAR=sqlite-jdbc-3.51.0.0.jar"
 
 rem Montar o classpath (.;lib\driver.jar)
 set "CLASSPATH=.;%LIB_DIR%\%JDBC_JAR%"

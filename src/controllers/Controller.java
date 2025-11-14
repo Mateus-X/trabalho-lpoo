@@ -1,11 +1,17 @@
 package controllers;
 
-import dao.RepositorioMemoria;
+import interfaces.IClienteDAO;
+import interfaces.IVeiculoDAO;
+import interfaces.ILocacaoDAO;
 
 public abstract class Controller {
-    protected RepositorioMemoria repositorioMemoria;
+    protected IClienteDAO clienteDAO;
+    protected IVeiculoDAO veiculoDAO;
+    protected ILocacaoDAO locacaoDAO;
 
-    public Controller(RepositorioMemoria repositorioMemoria) {
-        this.repositorioMemoria = repositorioMemoria;
+    public Controller(IClienteDAO clienteDAO, IVeiculoDAO veiculoDAO, ILocacaoDAO locacaoDAO) {
+        this.clienteDAO = clienteDAO;
+        this.veiculoDAO = veiculoDAO;
+        this.locacaoDAO = locacaoDAO;
     }
 }

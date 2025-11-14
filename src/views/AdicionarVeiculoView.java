@@ -35,7 +35,7 @@ public class AdicionarVeiculoView extends JFrame {
         super("Adicionar Veiculo");
         this.veiculoController = veiculoController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 500);
+        setSize(1200, 900);
         setLocationRelativeTo(null);
         initUI();
         addListeners();
@@ -128,13 +128,13 @@ public class AdicionarVeiculoView extends JFrame {
                 Object modelo = cbModelo.getSelectedItem();
                 if (tipo.equals("Automovel") && modelo instanceof ModeloAutomovel) {
                     veiculoController.cadastrarVeiculo(
-                            new Automovel(marca, categoria, valorCompra, placa, ano, (ModeloAutomovel) modelo));
+                            new Automovel(marca, categoria, valorCompra, placa, ano, (ModeloAutomovel) modelo, null));
                 } else if (tipo.equals("Motocicleta") && modelo instanceof ModeloMotocicleta) {
                     veiculoController.cadastrarVeiculo(
-                            new Motocicleta(marca, categoria, valorCompra, placa, ano, (ModeloMotocicleta) modelo));
+                            new Motocicleta(marca, categoria, valorCompra, placa, ano, (ModeloMotocicleta) modelo, null));
                 } else if (tipo.equals("Van") && modelo instanceof ModeloVan) {
                     veiculoController
-                            .cadastrarVeiculo(new Van(marca, categoria, valorCompra, placa, ano, (ModeloVan) modelo));
+                            .cadastrarVeiculo(new Van(marca, categoria, valorCompra, placa, ano, (ModeloVan) modelo, null));
                 } else {
                     JOptionPane.showMessageDialog(null, "Selecione um modelo valido.");
                 }

@@ -22,7 +22,7 @@ public class ClienteView extends JFrame {
         super("Gerenciamento de Clientes");
         this.clienteController = clienteController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1200, 900);
         setLocationRelativeTo(null);
         
         initUI();

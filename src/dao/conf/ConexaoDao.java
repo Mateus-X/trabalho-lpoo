@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 
 public class ConexaoDao {
 
@@ -14,13 +19,8 @@ public class ConexaoDao {
     public static Connection getConexao() {
         try {
             if (conexao == null || conexao.isClosed()) {
-                // Carrega o driver
                 Class.forName("org.sqlite.JDBC");
-                // Cria a conexão
                 conexao = DriverManager.getConnection(URL);
-                
-                // Cria as tabelas na primeira execução
-                criarTabelas(conexao);
             }
         } catch (SQLException | ClassNotFoundException e) {
             System.err.println("Erro ao conectar ou criar o banco: " + e.getMessage());
@@ -40,67 +40,81 @@ public class ConexaoDao {
         }
     }
     
-    // Método para criar as tabelas (DDL)
-    private static void criarTabelas(Connection conn) {
+
+    public static void criarTabelas(Connection conn) {
         try (Statement stmt = conn.createStatement()) {
-            
-            // Tabela Cliente
-            String sqlCliente = "CREATE TABLE IF NOT EXISTS cliente ("
-                              + "cpf TEXT PRIMARY KEY,"
-                              + "nome TEXT NOT NULL,"
-                              + "sobrenome TEXT NOT NULL,"
-                              + "rg TEXT,"
-                              + "endereco TEXT"
-                              + ");";
-            stmt.execute(sqlCliente);
+            Path schemaPath = Paths.get("docs", "schema.sql");
+            if (Files.exists(schemaPath)) {
+                try {
+                    String sql = new String(Files.readAllBytes(schemaPath), StandardCharsets.UTF_8);
+                    String[] statements = sql.split(";");
+                    for (String s : statements) {
+                        String trimmed = s.trim();
+                        if (!trimmed.isEmpty()) {
+                            stmt.execute(trimmed);
+                        }
+                    }
+                    return; 
+                } catch (IOException | SQLException e) {
+                    System.err.println("Falha ao executar docs/schema.sql, tentando DDL embutido: " + e.getMessage());
 
-            // Tabela Locacao
-            String sqlLocacao = "CREATE TABLE IF NOT EXISTS locacao ("
-                              + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                              + "dias INTEGER NOT NULL,"
-                              + "valor REAL NOT NULL,"
-                              + "data TEXT NOT NULL," // Usaremos TEXT para data (formato ISO)
-                              + "cliente_cpf TEXT NOT NULL,"
-                              + "FOREIGN KEY (cliente_cpf) REFERENCES cliente(cpf)"
-                              + ");";
-            stmt.execute(sqlLocacao);
+                }
+            }
 
-            // Tabela Veiculo
-            String sqlVeiculo = "CREATE TABLE IF NOT EXISTS veiculo ("
-                              + "placa TEXT PRIMARY KEY,"
-                              + "marca TEXT NOT NULL,"
-                              + "estado TEXT NOT NULL,"
-                              + "categoria TEXT NOT NULL,"
-                              + "valor_compra REAL NOT NULL,"
-                              + "ano INTEGER NOT NULL,"
-                              + "tipo_veiculo TEXT NOT NULL, " // Para polimorfismo (Automovel, Van, etc)
-                              + "locacao_id INTEGER," // Chave estrangeira para locacao
-                              + "FOREIGN KEY (locacao_id) REFERENCES locacao(id)"
-                              + ");";
-            stmt.execute(sqlVeiculo);
-        
-            // Tabelas filhas para herança
-            String sqlAutomovel = "CREATE TABLE IF NOT EXISTS automovel ("
-                                + "placa TEXT PRIMARY KEY,"
-                                + "modelo TEXT NOT NULL,"
-                                + "FOREIGN KEY (placa) REFERENCES veiculo(placa) ON DELETE CASCADE"
-                                + ");";
-            stmt.execute(sqlAutomovel);
-            
-            String sqlMotocicleta = "CREATE TABLE IF NOT EXISTS motocicleta ("
-                                  + "placa TEXT PRIMARY KEY,"
-                                  + "modelo TEXT NOT NULL,"
-                                  + "FOREIGN KEY (placa) REFERENCES veiculo(placa) ON DELETE CASCADE"
-                                  + ");";
-            stmt.execute(sqlMotocicleta);
+            // // Fallback: DDL embutido (mantido para compatibilidade caso schema.sql não exista)
+            // String sqlCliente = "CREATE TABLE IF NOT EXISTS cliente ("
+            //                   + "cpf TEXT PRIMARY KEY,"
+            //                   + "nome TEXT NOT NULL,"
+            //                   + "sobrenome TEXT NOT NULL,"
+            //                   + "rg TEXT,"
+            //                   + "endereco TEXT"
+            //                   + ");";
+            // stmt.execute(sqlCliente);
 
-            String sqlVan = "CREATE TABLE IF NOT EXISTS van ("
-                          + "placa TEXT PRIMARY KEY,"
-                          + "modelo TEXT NOT NULL,"
-                          + "FOREIGN KEY (placa) REFERENCES veiculo(placa) ON DELETE CASCADE"
-                          + ");";
-            stmt.execute(sqlVan);
+            // String sqlLocacao = "CREATE TABLE IF NOT EXISTS locacao ("
+            //                   + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            //                   + "dias INTEGER NOT NULL,"
+            //                   + "valor REAL NOT NULL,"
+            //                   + "data TEXT NOT NULL,"
+            //                   + "cliente_cpf TEXT NOT NULL,"
+            //                   + "FOREIGN KEY (cliente_cpf) REFERENCES cliente(cpf)"
+            //                   + ");";
+            // stmt.execute(sqlLocacao);
+
+            // String sqlVeiculo = "CREATE TABLE IF NOT EXISTS veiculo ("
+            //                   + "placa TEXT PRIMARY KEY,"
+            //                   + "marca TEXT NOT NULL,"
+            //                   + "estado TEXT NOT NULL,"
+            //                   + "categoria TEXT NOT NULL,"
+            //                   + "valor_compra REAL NOT NULL,"
+            //                   + "ano INTEGER NOT NULL,"
+            //                   + "tipo_veiculo TEXT NOT NULL, "
+            //                   + "locacao_id INTEGER," 
+            //                   + "FOREIGN KEY (locacao_id) REFERENCES locacao(id)"
+            //                   + ");";
+            // stmt.execute(sqlVeiculo);
+
+            // String sqlAutomovel = "CREATE TABLE IF NOT EXISTS automovel ("
+            //                     + "placa TEXT PRIMARY KEY,"
+            //                     + "modelo TEXT NOT NULL,"
+            //                     + "FOREIGN KEY (placa) REFERENCES veiculo(placa) ON DELETE CASCADE"
+            //                     + ");";
+            // stmt.execute(sqlAutomovel);
             
+            // String sqlMotocicleta = "CREATE TABLE IF NOT EXISTS motocicleta ("
+            //                       + "placa TEXT PRIMARY KEY,"
+            //                       + "modelo TEXT NOT NULL,"
+            //                       + "FOREIGN KEY (placa) REFERENCES veiculo(placa) ON DELETE CASCADE"
+            //                       + ");";
+            // stmt.execute(sqlMotocicleta);
+
+            // String sqlVan = "CREATE TABLE IF NOT EXISTS van ("
+            //               + "placa TEXT PRIMARY KEY,"
+            //               + "modelo TEXT NOT NULL,"
+            //               + "FOREIGN KEY (placa) REFERENCES veiculo(placa) ON DELETE CASCADE"
+            //               + ");";
+            // stmt.execute(sqlVan);
+
         } catch (SQLException e) {
             System.err.println("Erro ao criar tabelas: " + e.getMessage());
         }

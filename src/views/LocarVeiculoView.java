@@ -43,7 +43,7 @@ public class LocarVeiculoView extends JFrame {
         this.veiculoController = veiculoController;
         this.clienteController = clienteController;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(900, 600);
+        setSize(1200, 900);
         setLocationRelativeTo(null);
 
         initUI();

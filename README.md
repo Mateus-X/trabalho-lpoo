@@ -4,7 +4,7 @@ Projeto desenvolvido para a disciplina de **LPOO I** (Linguagem de Programação
 
 # Banco de dacdos
 
-Baixa esse aq 
+Baixa essa versao sqlite-jdbc-3.51.0.0.jar aq no link abaxo 
 https://github.com/xerial/sqlite-jdbc/releases
 
 buta no lib/

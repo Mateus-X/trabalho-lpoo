@@ -1,20 +1,23 @@
 package controllers;
 
-import dao.RepositorioMemoria;
+import interfaces.IVeiculoDAO;
 import models.Veiculo;
 
 public class VendaController {
-    private RepositorioMemoria repositorioMemoria;
+    private IVeiculoDAO veiculoDAO;
 
-    public VendaController(RepositorioMemoria repositorioMemoria) {
-        this.repositorioMemoria = repositorioMemoria;
+    public VendaController(IVeiculoDAO veiculoDAO) {
+        this.veiculoDAO = veiculoDAO;
     }
 
     public void venderVeiculo(String placa) {
         try {
-            Veiculo veiculo = repositorioMemoria.buscarVeiculoPorPlaca(placa);
+            Veiculo veiculo = veiculoDAO.buscarPorPlaca(placa);
+            if (veiculo == null) throw new IllegalArgumentException("Veiculo nao encontrado.");
             veiculo.vender();
-        } catch (IllegalArgumentException e) {
+            veiculoDAO.atualizar(veiculo);
+            System.out.println("Venda realizada com sucesso.");
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
